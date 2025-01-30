@@ -9,3 +9,4 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/chat', [ChatController::class, 'getModels'])->name('chat.models');
+Route::get('/chat/prompts', [ChatController::class, 'getPrompts'])->name('chat.prompts');

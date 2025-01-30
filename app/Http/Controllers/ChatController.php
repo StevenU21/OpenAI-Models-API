@@ -17,4 +17,9 @@ class ChatController extends Controller
     {
         return $this->OpenAIService->getAIModels();
     }
+
+    public function getPrompts(): JsonResponse
+    {
+        return $this->OpenAIService->getPromptList();
+    }
 }
