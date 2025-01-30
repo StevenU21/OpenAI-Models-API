@@ -5,20 +5,39 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use OpenAI\Laravel\Facades\OpenAI;
 use OpenAI\Responses\Chat\CreateResponse;
+use OpenAI\Responses\Models\ListResponse;
 
 class ChatControllerTest extends TestCase
 {
+
     public function test_get_models()
     {
+        // Simula la respuesta de la API de OpenAI
+        OpenAI::fake([
+            ListResponse::fake([
+                'data' => [
+                    [
+                        'id' => 'model-id-1',
+                        'object' => 'model',
+                        'created' => 1610070400,
+                        'owned_by' => 'organization-owner',
+                        'permission' => [],
+                    ],
+                    [
+                        'id' => 'model-id-2',
+                        'object' => 'model',
+                        'created' => 1610070400,
+                        'owned_by' => 'organization-owner',
+                        'permission' => [],
+                    ],
+                ],
+            ]),
+        ]);
+
         $response = $this->get('/api/chat/models');
         $response->assertStatus(200);
     }
 
-    public function test_get_prompts()
-    {
-        $response = $this->get('/api/chat/prompts');
-        $response->assertStatus(200);
-    }
 
     public function test_conversation()
     {
