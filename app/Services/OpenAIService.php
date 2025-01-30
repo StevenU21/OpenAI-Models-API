@@ -12,14 +12,14 @@ class OpenAIService
     {
         $client = new Client();
         $response = $client->get('https://raw.githubusercontent.com/f/awesome-chatgpt-prompts/main/prompts.csv');
-        $csvString = $response->getBody();
+        $csvData = $response->getBody();
 
         // Remove the first line and last line
-        $csvString = substr($csvString, strpos($csvString, "\n") + 1);
-        $csvString = substr($csvString, 0, strrpos($csvString, "\n"));
+        $csvData = substr($csvData, strpos($csvData, "\n") + 1);
+        $csvData = substr($csvData, 0, strrpos($csvData, "\n"));
 
         $prompts = [];
-        foreach (explode("\n", $csvString) as $line) {
+        foreach (explode("\n", $csvData) as $line) {
             $values = str_getcsv($line);
             $promptName = trim($values[0], '"');
             $promptDescription = trim($values[1], '"');
