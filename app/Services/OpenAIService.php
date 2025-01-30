@@ -66,16 +66,9 @@ class OpenAIService
                 'model' => $model,
                 'temperature' => $temperature,
                 'messages' => [
-                    [
-                        'role' => 'system',
-                        'content' => $prompt
-                    ],
-                    [
-                        'role' => 'user',
-                        'content' => $text
-                    ]
+                    [ 'role' => 'system', 'content' => $prompt],
+                    [ 'role' => 'user', 'content' => $text]
                 ],
-                'max_tokens' => 1024,
             ]);
 
             foreach ($stream as $response) {
