@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\OpenAIResponseEvent;
 use Illuminate\Http\JsonResponse;
 use OpenAI\Laravel\Facades\OpenAI;
 use GuzzleHttp\Client;
@@ -66,8 +67,8 @@ class OpenAIService
                 'model' => $model,
                 'temperature' => $temperature,
                 'messages' => [
-                    [ 'role' => 'system', 'content' => $prompt],
-                    [ 'role' => 'user', 'content' => $text]
+                    ['role' => 'system', 'content' => $prompt],
+                    ['role' => 'user', 'content' => $text]
                 ],
             ]);
 
@@ -93,5 +94,26 @@ class OpenAIService
             'X-Accel-Buffering' => 'no',
             'Content-Type' => 'text/event-stream',
         ]);
+    }
+
+    public function streamedConversationWebsockets($text, $model = 'gpt-4', $temperature = 0.5, $prompt = 'You are a friendly chatbot.')
+    {
+        $stream = OpenAI::chat()->createStreamed([
+            'model' => $model,
+            'temperature' => $temperature,
+            'messages' => [
+                ['role' => 'system', 'content' => $prompt],
+                ['role' => 'user', 'content' => $text],
+            ],
+        ]);
+
+        foreach ($stream as $response) {
+            $text = $response->choices[0]->delta->content;
+            if (connection_aborted()) {
+                break;
+            }
+
+            event(new OpenAIResponseEvent($text));
+        }
     }
 }
