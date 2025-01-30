@@ -61,48 +61,44 @@ class OpenAIService
 
     public function streamedConversation($text, $model, $temperature, $prompt = 'You are a friendly chatbot.')
     {
-        $messages = [
-            ['role' => 'system', 'content' => $prompt],
-            ['role' => 'user', 'content' => $text]
-        ];
+        return response()->stream(function () use ($text, $model, $temperature, $prompt) {
+            $stream = OpenAI::chat()->createStreamed([
+                'model' => $model,
+                'temperature' => $temperature,
+                'messages' => [
+                    [
+                        'role' => 'system',
+                        'content' => $prompt
+                    ],
+                    [
+                        'role' => 'user',
+                        'content' => $text
+                    ]
+                ],
+                'max_tokens' => 1024,
+            ]);
 
-        try {
-            return response()->stream(function () use ($messages, $model, $temperature) {
-                $stream = OpenAI::chat()->createStreamed([
-                    'model' => $model,
-                    'messages' => $messages,
-                    'temperature' => $temperature,
-                    'max_tokens' => 1024,
-                ]);
-
-                $responses = [];
-                foreach ($stream as $response) {
-                    if (isset($response->choices[0]->delta->content)) {
-                        $content = $response->choices[0]->delta->content;
-                        if (connection_aborted()) {
-                            break;
-                        }
-                        $responses[] = $content;
-                    }
+            foreach ($stream as $response) {
+                $text = $response->choices[0]->delta->content;
+                if (connection_aborted()) {
+                    break;
                 }
 
-                echo json_encode(['responses' => $responses]);
+                echo "event: update\n";
+                echo 'data: ' . json_encode(['content' => $text]);
+                echo "\n\n";
                 ob_flush();
                 flush();
-            }, 200, [
-                'Cache-Control' => 'no-cache',
-                'X-Accel-Buffering' => 'no',
-                'Content-Type' => 'application/json',
-            ]);
-        } catch (\Exception $e) {
-            return response()->stream(function () use ($e) {
-                echo json_encode(['error' => $e->getMessage()]);
-                ob_flush();
-                flush();
-            }, 500, [
-                'Cache-Control' => 'no-cache',
-                'Content-Type' => 'application/json',
-            ]);
-        }
+            }
+
+            echo "event: end\n";
+            echo "data: {}\n\n";
+            ob_flush();
+            flush();
+        }, 200, [
+            'Cache-Control' => 'no-cache',
+            'X-Accel-Buffering' => 'no',
+            'Content-Type' => 'text/event-stream',
+        ]);
     }
 }
