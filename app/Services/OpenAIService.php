@@ -7,7 +7,7 @@ use OpenAI\Laravel\Facades\OpenAI;
 
 class OpenAIService
 {
-    public function getPromptList(): array
+    public function getPromptList()
     {
         $response = Http::get('https://raw.githubusercontent.com/f/awesome-chatgpt-prompts/main/prompts.csv');
 
@@ -15,10 +15,10 @@ class OpenAIService
             $csvData = $response->body();
             $lines = explode(PHP_EOL, $csvData);
             $prompts = array_map('str_getcsv', $lines);
-            return $prompts;
+            return response()->json($prompts);
         }
 
-        return [];
+        return response()->json([]);
     }
 
     public function conversation($text, $model, $temperature, $prompt = 'You are a friendly chatbot.')
