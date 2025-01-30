@@ -62,7 +62,7 @@ class ChatControllerTest extends TestCase
 
         $response = $this->post('/api/chat/streamed', [
             'text' => 'Hello, how are you?',
-            'model' => 'babbage-002',
+            'model' => 'gpt-3.5-turbo',
             'temperature' => 0.7,
             'prompt' => 'Hello, how are you?',
         ]);
