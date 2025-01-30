@@ -12,7 +12,6 @@ class ChatControllerTest extends TestCase
 
     public function test_get_models()
     {
-        // Simula la respuesta de la API de OpenAI
         OpenAI::fake([
             ListResponse::fake([
                 'data' => [
