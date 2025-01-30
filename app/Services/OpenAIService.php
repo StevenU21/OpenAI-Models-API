@@ -20,10 +20,10 @@ class OpenAIService
             'temperature' => $temperature,
         ]);
 
-        return [
+        return response()->json([
             'bot_message' => $response['choices'][0]['message']['content'],
             'input_tokens' => $response['usage']['prompt_tokens'],
             'output_tokens' => $response['usage']['completion_tokens'],
-        ];
+        ]);
     }
 }
