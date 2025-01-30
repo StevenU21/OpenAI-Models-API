@@ -33,4 +33,14 @@ class ChatController extends Controller
 
         return $this->OpenAIService->conversation($text, $model, $temperature, $prompt);
     }
+
+    public function streamed_conversation(ChatRequest $request): JsonResponse
+    {
+        $text = $request->validated()['text'];
+        $model = $request->validated()['model'];
+        $temperature = $request->validated()['temperature'];
+        $prompt = $request->validated()['prompt'];
+
+        return $this->OpenAIService->streamedConversation($text, $model, $temperature, $prompt);
+    }
 }
