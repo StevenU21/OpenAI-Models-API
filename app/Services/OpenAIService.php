@@ -61,41 +61,48 @@ class OpenAIService
 
     public function streamedConversation($text, $model, $temperature, $prompt = 'You are a friendly chatbot.')
     {
-        return response()->stream(function () use ($text, $model, $temperature, $prompt) {
-            $messages = [
-                ['role' => 'system', 'content' => $prompt],
-                ['role' => 'user', 'content' => $text]
-            ];
+        $messages = [
+            ['role' => 'system', 'content' => $prompt],
+            ['role' => 'user', 'content' => $text]
+        ];
 
-            $stream = OpenAI::chat()->createStreamed([
-                'model' => $model,
-                'messages' => $messages,
-                'temperature' => $temperature,
-                'max_tokens' => 1024,
-            ]);
+        try {
+            return response()->stream(function () use ($messages, $model, $temperature) {
+                $stream = OpenAI::chat()->createStreamed([
+                    'model' => $model,
+                    'messages' => $messages,
+                    'temperature' => $temperature,
+                    'max_tokens' => 1024,
+                ]);
 
-            foreach ($stream as $response) {
-                $text = $response->choices[0]->delta->content;
-                if (connection_aborted()) {
-                    break;
+                $responses = [];
+                foreach ($stream as $response) {
+                    if (isset($response->choices[0]->delta->content)) {
+                        $content = $response->choices[0]->delta->content;
+                        if (connection_aborted()) {
+                            break;
+                        }
+                        $responses[] = $content;
+                    }
                 }
 
-                echo "event: update\n";
-                echo 'data: ' . $text;
-                echo "\n\n";
+                echo json_encode(['responses' => $responses]);
                 ob_flush();
                 flush();
-            }
-
-            echo "event: update\n";
-            echo 'data: <END_STREAMING_SSE>';
-            echo "\n\n";
-            ob_flush();
-            flush();
-        }, 200, [
-            'Cache-Control' => 'no-cache',
-            'X-Accel-Buffering' => 'no',
-            'Content-Type' => 'text/event-stream',
-        ]);
+            }, 200, [
+                'Cache-Control' => 'no-cache',
+                'X-Accel-Buffering' => 'no',
+                'Content-Type' => 'application/json',
+            ]);
+        } catch (\Exception $e) {
+            return response()->stream(function () use ($e) {
+                echo json_encode(['error' => $e->getMessage()]);
+                ob_flush();
+                flush();
+            }, 500, [
+                'Cache-Control' => 'no-cache',
+                'Content-Type' => 'application/json',
+            ]);
+        }
     }
 }
