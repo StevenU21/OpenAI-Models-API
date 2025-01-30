@@ -24,7 +24,7 @@ class ChatController extends Controller
         return $this->OpenAIService->getPromptList();
     }
 
-    public function store(ChatRequest $request): JsonResponse
+    public function conversation(ChatRequest $request): JsonResponse
     {
         $text = $request->validated()['text'];
         $model = $request->validated()['model'];

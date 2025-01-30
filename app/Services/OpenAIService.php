@@ -3,23 +3,33 @@
 namespace App\Services;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Http;
 use OpenAI\Laravel\Facades\OpenAI;
+use GuzzleHttp\Client;
 
 class OpenAIService
 {
     public function getPromptList(): JsonResponse
     {
-        $response = Http::get('https://raw.githubusercontent.com/f/awesome-chatgpt-prompts/main/prompts.csv');
+        $client = new Client();
+        $response = $client->get('https://raw.githubusercontent.com/f/awesome-chatgpt-prompts/main/prompts.csv');
+        $csvString = $response->getBody();
 
-        if ($response->successful()) {
-            $csvData = $response->body();
-            $lines = explode(PHP_EOL, $csvData);
-            $prompts = array_map('str_getcsv', $lines);
-            return response()->json($prompts);
+        // Remove the first line and last line
+        $csvString = substr($csvString, strpos($csvString, "\n") + 1);
+        $csvString = substr($csvString, 0, strrpos($csvString, "\n"));
+
+        $prompts = [];
+        foreach (explode("\n", $csvString) as $line) {
+            $values = str_getcsv($line);
+            $promptName = trim($values[0], '"');
+            $promptDescription = trim($values[1], '"');
+            $prompts[] = [
+                'act' => $promptName,
+                'prompt' => $promptDescription
+            ];
         }
 
-        return response()->json([]);
+        return response()->json($prompts);
     }
 
     public function getAIModels(): JsonResponse

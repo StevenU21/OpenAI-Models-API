@@ -8,5 +8,8 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/chat', [ChatController::class, 'getModels'])->name('chat.models');
-Route::get('/chat/prompts', [ChatController::class, 'getPrompts'])->name('chat.prompts');
+Route::prefix('chat')->name('chat.')->group(function () {
+    Route::get('/models', [ChatController::class, 'getModels'])->name('models');
+    Route::get('/prompts', [ChatController::class, 'getPrompts'])->name('prompts');
+    Route::post('/', [ChatController::class, 'conversation'])->name('store');
+});
