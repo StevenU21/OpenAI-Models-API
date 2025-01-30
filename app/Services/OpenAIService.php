@@ -59,7 +59,7 @@ class OpenAIService
         ]);
     }
 
-    public function streamedConversation($text, $model, $temperature, $prompt = 'You are a friendly chatbot.')
+    public function streamedConversationSSE($text, $model, $temperature, $prompt = 'You are a friendly chatbot.')
     {
         return response()->stream(function () use ($text, $model, $temperature, $prompt) {
             $stream = OpenAI::chat()->createStreamed([
