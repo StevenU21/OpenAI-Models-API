@@ -13,4 +13,5 @@ Route::prefix('chat')->name('chat.')->group(function () {
     Route::get('/prompts', [ChatController::class, 'getPrompts'])->name('prompts');
     Route::post('/', [ChatController::class, 'conversation'])->name('conversation');
     Route::post('/streamed', [ChatController::class, 'streamed_conversation_sse'])->name('streamed.conversation');
+    Route::post('/streamed/websockets', [ChatController::class, 'streamed_conversation_websockets'])->name('streamed.conversation.websockets');
 });
