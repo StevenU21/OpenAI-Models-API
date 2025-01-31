@@ -40,6 +40,7 @@ class TextToSpeechController extends Controller
     {
         return $this->OpenAIService->getSpeechResponseFormats();
     }
+    
     public function textToSpeech(TextToSpeechRequest $request): JsonResponse
     {
         $model = $request->validated()['model'];
