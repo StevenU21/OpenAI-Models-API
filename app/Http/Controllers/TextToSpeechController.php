@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TextToSpeechRequest;
 use App\Services\OpenAIService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
 
 class TextToSpeechController extends Controller
 {
@@ -50,8 +51,16 @@ class TextToSpeechController extends Controller
 
         $response = $this->OpenAIService->textToSpeech($text, $voice, $model, $response_format, $language);
 
+        // Save audio file
+        $audioPath = 'speech_audios' . '/' . uniqid() . '.' . $response_format;
+        Storage::disk('public')->put($audioPath, $response);
+
+        // Generate the URL for the audio file
+        $audioUrl = Storage::disk('public')->url($audioPath);
+
         return response()->json([
-            'audio' => $response,
+            'text' => $text,
+            'audio_url' => $audioUrl,
         ]);
     }
 }
