@@ -39,6 +39,16 @@ class OpenAIService
         return response()->json($response);
     }
 
+    public function getTextToSpeechModels(): JsonResponse
+    {
+        $speech_audio_models = [
+            'tts-1',
+            'tts-1-hd'
+        ];
+
+        return response()->json($speech_audio_models);
+    }
+
     public function getLanguages(): JsonResponse
     {
         $languages = [
@@ -226,5 +236,17 @@ class OpenAIService
         ]);
 
         return trim($response['choices'][0]['message']['content']);
+    }
+
+    public function textToSpeech($text, $voice, $model = 'tts-1', $responseFormat = 'mp3')
+    {
+        $response = OpenAI::audio()->speech([
+            'model' => $model,
+            'input' => $text,
+            'voice' => $voice,
+            'response_format' => $responseFormat,
+        ]);
+
+        return response()->json($response);
     }
 }
