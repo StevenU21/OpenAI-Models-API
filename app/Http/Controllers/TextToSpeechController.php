@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TextToSpeechRequest;
 use App\Services\OpenAIService;
 use Illuminate\Http\JsonResponse;
 
@@ -39,5 +40,18 @@ class TextToSpeechController extends Controller
         return $this->OpenAIService->getSpeechResponseFormats();
     }
 
+    public function textToSpeech(TextToSpeechRequest $request)
+    {
+        $model = $request->validated()['model'];
+        $text = $request->validated()['text'];
+        $voice = $request->validated()['voice'];
+        $response_format = $request->validated()['response_format'];
+        $language = $request->validated()['language'];
 
+        $response = $this->OpenAIService->textToSpeech($model, $text, $voice, $response_format, $language);
+
+        return response()->json([
+            'audio' => $response,
+        ]);
+    }
 }
