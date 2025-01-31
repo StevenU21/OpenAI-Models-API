@@ -14,3 +14,5 @@ Route::prefix('chat')->name('chat.')->group(function () {
     Route::post('/', [ChatController::class, 'conversation'])->name('conversation');
     Route::post('/streamed', [ChatController::class, 'streamed_conversation_sse'])->name('streamed.conversation');
 });
+
+Route::post('/translate', [ChatController::class, 'translate'])->name('translate');
