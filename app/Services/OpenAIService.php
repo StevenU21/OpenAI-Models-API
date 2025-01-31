@@ -236,4 +236,16 @@ class OpenAIService
             'X-Accel-Buffering' => 'no',
         ]);
     }
+
+    public function speechToText($filePath, $language)
+    {
+        $response = OpenAI::audio()->transcribe([
+            'model' => 'whisper-1',
+            'file' => fopen($filePath, 'r'),
+            'language' => $language,
+            'response_format' => 'verbose_json',
+        ]);
+
+        return $response;
+    }
 }
