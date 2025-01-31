@@ -9,7 +9,6 @@ use OpenAI\Responses\Models\ListResponse;
 
 class ChatControllerTest extends TestCase
 {
-
     public function test_get_models()
     {
         OpenAI::fake([
@@ -36,7 +35,6 @@ class ChatControllerTest extends TestCase
         $response = $this->get('/api/chat/models');
         $response->assertStatus(200);
     }
-
 
     public function test_conversation()
     {
