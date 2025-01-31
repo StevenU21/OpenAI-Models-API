@@ -94,4 +94,21 @@ class OpenAIService
             'Content-Type' => 'text/event-stream',
         ]);
     }
+
+    public function translate($text, $sourceLanguage, $targetLanguage)
+    {
+        $messages = [
+            ['role' => 'system', 'content' => "You are a translator."],
+            ['role' => 'user', 'content' => "Translate the following text from $sourceLanguage to $targetLanguage: $text"]
+        ];
+
+        $response = OpenAI::chat()->create([
+            'model' => 'gpt-3.5-turbo',
+            'messages' => $messages,
+            'max_tokens' => 70,
+            'temperature' => 0,
+        ]);
+
+        return trim($response['choices'][0]['message']['content']);
+    }
 }

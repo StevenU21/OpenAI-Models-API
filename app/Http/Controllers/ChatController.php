@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests\ChatRequest;
+use App\Http\Requests\TranslationRequest;
 use App\Services\OpenAIService;
 use Illuminate\Http\JsonResponse;
 
@@ -43,5 +44,18 @@ class ChatController extends Controller
         $prompt = $validated['prompt'];
 
         return $this->OpenAIService->streamedConversationSSE($text, $model, $temperature, $prompt);
+    }
+
+   public function translate(TranslationRequest $request): JsonResponse
+    {
+        $text = $request->validated()['text'];
+        $sourceLanguage = $request->validated()['sourceLanguage'];
+        $targetLanguage = $request->validated()['targetLanguage'];
+
+        $response = $this->OpenAIService->translate($text, $sourceLanguage, $targetLanguage);
+
+        return response()->json([
+            'translatedText' => $response,
+        ]);
     }
 }
