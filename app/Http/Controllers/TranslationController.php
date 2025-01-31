@@ -8,6 +8,11 @@ use Illuminate\Http\JsonResponse;
 
 class TranslationController extends Controller
 {
+    public function getLanguages(OpenAIService $OpenAIService): JsonResponse
+    {
+        return $OpenAIService->getLanguages();
+    }
+
     public function translate(TranslationRequest $request, OpenAIService $OpenAIService): JsonResponse
     {
         $text = $request->validated()['text'];

@@ -15,4 +15,7 @@ Route::prefix('chat')->name('chat.')->group(function () {
     Route::post('/streamed', [ChatController::class, 'streamed_conversation_sse'])->name('streamed.conversation');
 });
 
-Route::post('/translate', [ChatController::class, 'translate'])->name('translate');
+Route::prefix('translation')->name('translation.')->group(function () {
+    Route::get('/languages', [ChatController::class, 'getLanguages'])->name('languages');
+    Route::post('/', [ChatController::class, 'translate'])->name('translate');
+});
