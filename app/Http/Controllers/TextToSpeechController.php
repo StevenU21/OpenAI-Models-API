@@ -40,7 +40,6 @@ class TextToSpeechController extends Controller
     {
         return $this->OpenAIService->getSpeechResponseFormats();
     }
-
     public function textToSpeech(TextToSpeechRequest $request): JsonResponse
     {
         $model = $request->validated()['model'];
@@ -52,7 +51,7 @@ class TextToSpeechController extends Controller
         $response = $this->OpenAIService->textToSpeech($text, $voice, $model, $response_format, $language);
 
         // Save audio file
-        $audioPath = 'speech_audios' . '/' . uniqid() . '.' . $response_format;
+        $audioPath = 'speech_audios/' . uniqid() . '.' . $response_format;
         Storage::disk('public')->put($audioPath, $response);
 
         // Generate the URL for the audio file
@@ -62,5 +61,19 @@ class TextToSpeechController extends Controller
             'text' => $text,
             'audio_url' => $audioUrl,
         ]);
+    }
+
+    public function getGeneratedSpeechAudios(): JsonResponse
+    {
+        $audioFiles = Storage::disk('public')->files('speech_audios');
+
+        $audioData = array_map(function ($file) {
+            return [
+                'name' => basename($file),
+                'audio_url' => Storage::disk('public')->url($file),
+            ];
+        }, $audioFiles);
+
+        return response()->json($audioData);
     }
 }
