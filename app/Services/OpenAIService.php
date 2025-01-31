@@ -16,7 +16,6 @@ class OpenAIService
 
         if (file_exists($filePath)) {
             $file = fopen($filePath, 'r');
-            // Remove the first line
             fgets($file);
 
             while (($line = fgets($file)) !== false) {
