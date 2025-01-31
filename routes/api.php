@@ -26,4 +26,7 @@ Route::prefix('text-to-speech')->name('text-to-speech.')->group(function () {
     Route::get('/models', [TextToSpeechController::class, 'getTextToSpeechModels'])->name('models');
     Route::get('/voices', [TextToSpeechController::class, 'getSpeechVoices'])->name('voices');
     Route::get('/voices/audio', [TextToSpeechController::class, 'getSpeechVoicesAudio'])->name('voices.audio');
+    Route::get('/languages', [TextToSpeechController::class, 'getSpeechLanguages'])->name('languages');
+    Route::get('/response-formats', [TextToSpeechController::class, 'getSpeechResponseFormats'])->name('response-formats');
+    Route::post('/', [TextToSpeechController::class, 'textToSpeech'])->name('text-to-speech');
 });
