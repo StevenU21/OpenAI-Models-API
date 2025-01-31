@@ -5,6 +5,7 @@ namespace App\Services;
 use Illuminate\Http\JsonResponse;
 use OpenAI\Laravel\Facades\OpenAI;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\File;
 
 class OpenAIService
 {
@@ -64,6 +65,19 @@ class OpenAIService
         ];
 
         return response()->json($voices);
+    }
+
+    public function getSpeechVoiceAudios(): JsonResponse
+    {
+        $audioPath = public_path('speech_voices');
+        $audioFiles = File::files($audioPath);
+
+        $audioList = [];
+        foreach ($audioFiles as $file) {
+            $audioList[] = $file->getFilename();
+        }
+
+        return response()->json($audioList);
     }
 
     public function getLanguages(): JsonResponse
