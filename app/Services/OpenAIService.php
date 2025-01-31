@@ -129,8 +129,6 @@ class OpenAIService
         return response()->json($responseFormats);
     }
 
-
-
     public function conversation($text, $model, $temperature, $prompt = 'You are a friendly chatbot.'): JsonResponse
     {
         $messages = [
@@ -204,13 +202,14 @@ class OpenAIService
         return trim($response['choices'][0]['message']['content']);
     }
 
-    public function textToSpeech($text, $voice, $model = 'tts-1', $responseFormat = 'mp3')
+    public function textToSpeech($text, $voice, $model = 'tts-1', $responseFormat = 'mp3', $language = 'en'): JsonResponse
     {
         $response = OpenAI::audio()->speech([
             'model' => $model,
             'input' => $text,
             'voice' => $voice,
             'response_format' => $responseFormat,
+            'language' => $language,
         ]);
 
         return response()->json($response);
