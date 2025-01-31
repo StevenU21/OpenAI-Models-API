@@ -25,6 +25,7 @@ class TextToSpeechRequest extends FormRequest
             'model' => ['required', 'string', 'in:tts-1,tts-1-hd'],
             'text' => ['required', 'string', 'min:3', 'max:3000'],
             'voice' => ['required', 'string', 'in:alloy,ash,coral,echo,fable,onyx,nova,sage,shimmer'],
+            'response_format' => ['string', 'in:mp3,opus,aac,flac,wav,pcm'],
         ];
     }
 
@@ -45,7 +46,9 @@ class TextToSpeechRequest extends FormRequest
             'text.max' => 'The text may not be greater than :max characters.',
             'voice.required' => 'The voice is required.',
             'voice.string' => 'The voice must be a string.',
-            'voice.in' => 'The selected voice is invalid.',
+            'voice.in' => 'The selected voice must be one of the following options: in:.',
+            'response_format.string' => 'The response format must be a string.',
+            'response_format.in' => 'The selected response format must be one of the following options: in:',
         ];
     }
 }
