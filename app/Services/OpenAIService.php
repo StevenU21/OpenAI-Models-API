@@ -49,6 +49,23 @@ class OpenAIService
         return response()->json($speech_audio_models);
     }
 
+    public function getSpeechVoices(): JsonResponse
+    {
+        $voices = [
+            'alloy',
+            'ash',
+            'coral',
+            'echo',
+            'fable',
+            'onyx',
+            'nova',
+            'sage',
+            'shimmer',
+        ];
+
+        return response()->json($voices);
+    }
+
     public function getLanguages(): JsonResponse
     {
         $languages = [
