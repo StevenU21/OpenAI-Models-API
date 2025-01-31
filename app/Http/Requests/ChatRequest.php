@@ -22,10 +22,10 @@ class ChatRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'text' => ['required', 'string', 'min:1', 'max:1000'],
+            'text' => ['required', 'string', 'min:3', 'max:1000'],
             'model' => ['required', 'string'],
             'temperature' => ['required', 'numeric', 'min:0', 'max:1.4'],
-            'prompt' => ['string'],
+            'prompt' => [ 'required', 'string'],
         ];
     }
 
@@ -39,7 +39,7 @@ class ChatRequest extends FormRequest
         return [
             'text.required' => 'Text is required',
             'text.string' => 'Text must be a string',
-            'text.min' => 'Text must be at least 1 character',
+            'text.min' => 'Text must be at least :min character',
             'text.max' => 'Text must be at most 1000 characters',
             'model.required' => 'Model is required',
             'model.string' => 'Model must be a string',
@@ -47,6 +47,7 @@ class ChatRequest extends FormRequest
             'temperature.numeric' => 'Temperature must be a number',
             'temperature.min' => 'Temperature must be at least 0',
             'temperature.max' => 'Temperature must be at most 1.4',
+            'prompt.required' => 'Prompt is required',
             'prompt.string' => 'Prompt must be a string',
         ];
     }
