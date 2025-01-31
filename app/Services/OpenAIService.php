@@ -11,23 +11,24 @@ class OpenAIService
 {
     public function getPromptList(): JsonResponse
     {
-        $client = new Client();
-        $response = $client->get('https://raw.githubusercontent.com/f/awesome-chatgpt-prompts/main/prompts.csv');
-        $csvData = $response->getBody();
-
-        // Remove the first line and last line
-        $csvData = substr($csvData, strpos($csvData, "\n") + 1);
-        $csvData = substr($csvData, 0, strrpos($csvData, "\n"));
-
+        $filePath = public_path('prompts/prompts.csv');
         $prompts = [];
-        foreach (explode("\n", $csvData) as $line) {
-            $values = str_getcsv($line);
-            $promptName = trim($values[0], '"');
-            $promptDescription = trim($values[1], '"');
-            $prompts[] = [
-                'act' => $promptName,
-                'prompt' => $promptDescription
-            ];
+
+        if (file_exists($filePath)) {
+            $file = fopen($filePath, 'r');
+            // Remove the first line
+            fgets($file);
+
+            while (($line = fgets($file)) !== false) {
+                $values = str_getcsv($line);
+                $promptName = trim($values[0], '"');
+                $promptDescription = trim($values[1], '"');
+                $prompts[] = [
+                    'act' => $promptName,
+                    'prompt' => $promptDescription
+                ];
+            }
+            fclose($file);
         }
 
         return response()->json($prompts);
