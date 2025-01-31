@@ -44,18 +44,4 @@ class ChatController extends Controller
 
         return $this->OpenAIService->streamedConversationSSE($text, $model, $temperature, $prompt);
     }
-
-    public function streamed_conversation_websockets(ChatRequest $request)
-    {
-        $validated = $request->validated();
-        $text = $validated['text'];
-        $model = $validated['model'];
-        $temperature = $validated['temperature'];
-        $prompt = $validated['prompt'];
-
-        $this->OpenAIService->streamedConversationWebsockets($text, $model, $temperature, $prompt);
-
-        return response()->json(['message' => 'Streaming started'], 200);
-    }
-
 }
