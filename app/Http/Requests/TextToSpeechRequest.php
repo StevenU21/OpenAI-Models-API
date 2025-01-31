@@ -47,11 +47,11 @@ class TextToSpeechRequest extends FormRequest
             'text.max' => 'The text may not be greater than :max characters.',
             'voice.required' => 'The voice is required.',
             'voice.string' => 'The voice must be a string.',
-            'voice.in' => 'The selected voice must be one of the following options: in:.',
+            'voice.in' => 'The selected voice must be one of the following options: :in.',
             'response_format.string' => 'The response format must be a string.',
-            'response_format.in' => 'The selected response format must be one of the following options: in:',
+            'response_format.in' => 'The selected response format must be one of the following options: :in',
             'language.string' => 'The language must be a string.',
-            'language.in' => 'The selected language must be one of the following options: in:',
+            'language.in' => 'The selected language must be one of the following options: :in',
         ];
     }
 }
