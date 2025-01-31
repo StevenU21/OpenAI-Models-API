@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\TextToSpeechController;
 use App\Http\Controllers\TranslationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,4 +20,10 @@ Route::prefix('chat')->name('chat.')->group(function () {
 Route::prefix('translation')->name('translation.')->group(function () {
     Route::get('/languages', [TranslationController::class, 'getLanguages'])->name('languages');
     Route::post('/', [TranslationController::class, 'translate'])->name('translate');
+});
+
+Route::prefix('text-to-speech')->name('text-to-speech.')->group(function () {
+    Route::get('/models', [TextToSpeechController::class, 'getTextToSpeechModels'])->name('models');
+    Route::get('/voices', [TextToSpeechController::class, 'getSpeechVoices'])->name('voices');
+    Route::get('/voices/audio', [TextToSpeechController::class, 'getSpeechVoicesAudio'])->name('voices.audio');
 });
