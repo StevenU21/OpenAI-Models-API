@@ -16,13 +16,13 @@ class TranslationController extends Controller
     public function translate(TranslationRequest $request, OpenAIService $OpenAIService): JsonResponse
     {
         $text = $request->validated()['text'];
-        $sourceLanguage = $request->validated()['sourceLanguage'];
-        $targetLanguage = $request->validated()['targetLanguage'];
+        $sourceLanguage = $request->validated()['source_language'];
+        $targetLanguage = $request->validated()['target_language'];
 
         $response = $OpenAIService->translate($text, $sourceLanguage, $targetLanguage);
 
         return response()->json([
-            'translatedText' => $response,
+            'translated_response' => $response,
         ]);
     }
 }

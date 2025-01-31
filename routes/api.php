@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\TranslationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +17,6 @@ Route::prefix('chat')->name('chat.')->group(function () {
 });
 
 Route::prefix('translation')->name('translation.')->group(function () {
-    Route::get('/languages', [ChatController::class, 'getLanguages'])->name('languages');
-    Route::post('/', [ChatController::class, 'translate'])->name('translate');
+    Route::get('/languages', [TranslationController::class, 'getLanguages'])->name('languages');
+    Route::post('/', [TranslationController::class, 'translate'])->name('translate');
 });
