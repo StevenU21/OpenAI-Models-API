@@ -81,9 +81,8 @@ class OpenAIService
         return response()->json($audioList);
     }
 
-    public function getLanguages(): JsonResponse
+    private function readLanguagesFromFile(string $filePath): array
     {
-        $filePath = public_path('languages/languages.txt');
         $languages = [];
 
         if (file_exists($filePath)) {
@@ -97,8 +96,40 @@ class OpenAIService
             fclose($file);
         }
 
+        return $languages;
+    }
+
+    public function getLanguages(): JsonResponse
+    {
+        $filePath = public_path('languages/languages.txt');
+        $languages = $this->readLanguagesFromFile($filePath);
+
         return response()->json($languages);
     }
+
+    public function getSpeechLanguages(): JsonResponse
+    {
+        $filePath = public_path('languages/speech_languages.txt');
+        $languages = $this->readLanguagesFromFile($filePath);
+
+        return response()->json($languages);
+    }
+
+    public function getSpeechResponseFormats(): JsonResponse
+    {
+        $responseFormats = [
+            'mp3',
+            'opus',
+            'aac',
+            'flac',
+            'wav',
+            'pcm',
+        ];
+
+        return response()->json($responseFormats);
+    }
+
+
 
     public function conversation($text, $model, $temperature, $prompt = 'You are a friendly chatbot.'): JsonResponse
     {
