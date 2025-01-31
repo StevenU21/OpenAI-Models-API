@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ChatRequest;
 use App\Http\Requests\TextToSpeechRequest;
 use App\Services\OpenAIService;
 use Illuminate\Http\JsonResponse;
@@ -82,6 +83,6 @@ class TextToSpeechController extends Controller
     {
         $validated = $request->validated();
 
-        return $this->OpenAIService->textToSpeechStreamed($validated['text'], $validated['voice'], $validated['model'],$validated['response_format'],$validated['language']);
+        return $this->OpenAIService->textToSpeechStreamed($validated['text'], $validated['voice'], $validated['model'], $validated['response_format'], $validated['language']);
     }
 }
