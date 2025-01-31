@@ -45,17 +45,4 @@ class ChatController extends Controller
 
         return $this->OpenAIService->streamedConversationSSE($text, $model, $temperature, $prompt);
     }
-
-   public function translate(TranslationRequest $request): JsonResponse
-    {
-        $text = $request->validated()['text'];
-        $sourceLanguage = $request->validated()['sourceLanguage'];
-        $targetLanguage = $request->validated()['targetLanguage'];
-
-        $response = $this->OpenAIService->translate($text, $sourceLanguage, $targetLanguage);
-
-        return response()->json([
-            'translatedText' => $response,
-        ]);
-    }
 }
