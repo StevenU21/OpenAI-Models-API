@@ -40,7 +40,7 @@ class TextToSpeechController extends Controller
     {
         return $this->OpenAIService->getSpeechResponseFormats();
     }
-    
+
     public function textToSpeech(TextToSpeechRequest $request): JsonResponse
     {
         $model = $request->validated()['model'];
@@ -76,5 +76,12 @@ class TextToSpeechController extends Controller
         }, $audioFiles);
 
         return response()->json($audioData);
+    }
+
+    public function textToSpeechStreamed(TextToSpeechRequest $request)
+    {
+        $validated = $request->validated();
+
+        return $this->OpenAIService->textToSpeechStreamed($validated['text'], $validated['voice'], $validated['model'],$validated['response_format'],$validated['language']);
     }
 }

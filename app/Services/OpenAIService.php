@@ -68,17 +68,17 @@ class OpenAIService
     }
 
     public function getSpeechVoiceAudios(): JsonResponse
-        {
-            $audioPath = public_path('speech_voices');
-            $audioFiles = File::files($audioPath);
+    {
+        $audioPath = public_path('speech_voices');
+        $audioFiles = File::files($audioPath);
 
-            $audioList = [];
-            foreach ($audioFiles as $file) {
-                $audioList[] = asset('speech_voices/' . $file->getFilename());
-            }
-
-            return response()->json($audioList);
+        $audioList = [];
+        foreach ($audioFiles as $file) {
+            $audioList[] = asset('speech_voices/' . $file->getFilename());
         }
+
+        return response()->json($audioList);
+    }
 
     private function readLanguagesFromFile(string $filePath): array
     {
@@ -213,4 +213,28 @@ class OpenAIService
 
         return $response;
     }
+
+    public function textToSpeechStreamed($text, $voice, $model = 'tts-1', $responseFormat = 'mp3', $language = 'en')
+    {
+        return response()->stream(function () use ($text, $voice, $model, $responseFormat, $language) {
+            $stream = OpenAI::audio()->speechStreamed([
+                'model' => $model,
+                'input' => $text,
+                'voice' => $voice,
+                'response_format' => $responseFormat,
+                'language' => $language,
+            ]);
+
+            foreach ($stream as $chunk) {
+                echo $chunk;
+                ob_flush();
+                flush();
+            }
+        }, 200, [
+            'Content-Type' => 'audio/mpeg',
+            'Cache-Control' => 'no-cache',
+            'X-Accel-Buffering' => 'no',
+        ]);
+    }
+
 }
