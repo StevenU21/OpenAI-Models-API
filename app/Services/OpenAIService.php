@@ -114,9 +114,9 @@ class OpenAIService
         return response()->json($languages);
     }
 
-    public function getSpeechResponseFormats(): JsonResponse
+    public function getTextSpeechResponseFormats(): JsonResponse
     {
-        $responseFormats = [
+        $text_speech_response_format = [
             'mp3',
             'opus',
             'aac',
@@ -125,7 +125,20 @@ class OpenAIService
             'pcm',
         ];
 
-        return response()->json($responseFormats);
+        return response()->json($text_speech_response_format);
+    }
+
+    public function getSpeechTextResponseFormats()
+    {
+        $speech_text_response_formats = [
+            'json',
+            'text',
+            'srt',
+            'verbose_json',
+            'vtt'
+        ];
+
+        return response()->json($speech_text_response_formats);
     }
 
     public function conversation($text, $model, $temperature, $prompt = 'You are a friendly chatbot.'): JsonResponse
@@ -244,6 +257,7 @@ class OpenAIService
             'file' => fopen($filePath, 'r'),
             'language' => $language,
             'response_format' => 'verbose_json',
+            ''
         ]);
 
         return $response;

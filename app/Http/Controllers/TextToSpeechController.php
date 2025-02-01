@@ -37,9 +37,9 @@ class TextToSpeechController extends Controller
         return $this->OpenAIService->getSpeechLanguages();
     }
 
-    public function getSpeechResponseFormats(): JsonResponse
+    public function getTextSpeechResponseFormats(): JsonResponse
     {
-        return $this->OpenAIService->getSpeechResponseFormats();
+        return $this->OpenAIService->getTextSpeechResponseFormats();
     }
 
     public function textToSpeech(TextToSpeechRequest $request): JsonResponse
