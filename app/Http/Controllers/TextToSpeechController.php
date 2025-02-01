@@ -47,9 +47,10 @@ class TextToSpeechController extends Controller
         $input = $request->validated()['input'];
         $voice = $request->validated()['voice'];
         $response_format = $request->validated()['response_format'];
+        $speed = $request->validated()['speed'];
         $language = $request->validated()['language'];
 
-        $response = $this->OpenAIService->textToSpeech($input, $voice, $model, $response_format, $language);
+        $response = $this->OpenAIService->textToSpeech($input, $voice, $model, $response_format, $speed, $language);
 
         // Save audio file
         $audioPath = 'speech_audios/' . uniqid() . '.' . $response_format;
@@ -81,6 +82,6 @@ class TextToSpeechController extends Controller
     public function textToSpeechStreamed(TextToSpeechRequest $request)
     {
         $validated = $request->validated();
-        return $this->OpenAIService->textToSpeechStreamed($validated['input'], $validated['voice'], $validated['model'], $validated['response_format'], $validated['language']);
+        return $this->OpenAIService->textToSpeechStreamed($validated['input'], $validated['voice'], $validated['model'], $validated['response_format'], $validated['language'], $validated['language']);
     }
 }

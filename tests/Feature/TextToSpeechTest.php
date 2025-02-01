@@ -31,7 +31,7 @@ class TextToSpeechTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_get_speech_response_formats()
+    public function test_get_text_speech_response_formats()
     {
         $response = $this->get('/api/text-to-speech/response-formats');
         $response->assertStatus(200);
@@ -56,6 +56,7 @@ class TextToSpeechTest extends TestCase
             'model' => 'tts-1',
             'voice' => 'alloy',
             'response_format' => 'mp3',
+            'speed' => '1',
             'language' => 'en',
         ]);
 
@@ -65,10 +66,11 @@ class TextToSpeechTest extends TestCase
     public function test_validation_input_max()
     {
         $response = $this->post('/api/text-to-speech', [
-            'input' => str_repeat('a', 3001),
+            'input' => str_repeat('a', 4097),
             'model' => 'tts-1',
             'voice' => 'alloy',
             'response_format' => 'mp3',
+            'speed' => '1',
             'language' => 'en',
         ]);
 
@@ -81,6 +83,7 @@ class TextToSpeechTest extends TestCase
             'input' => 'Hello, how are you?',
             'voice' => 'alloy',
             'response_format' => 'mp3',
+            'speed' => '1',
             'language' => 'en',
         ]);
 
@@ -94,6 +97,7 @@ class TextToSpeechTest extends TestCase
             'model' => 'tts-2',
             'voice' => 'alloy',
             'response_format' => 'mp3',
+            'speed' => '1',
             'language' => 'en',
         ]);
 
@@ -106,6 +110,7 @@ class TextToSpeechTest extends TestCase
             'input' => 'Hello, how are you?',
             'model' => 'tts-1',
             'response_format' => 'mp3',
+            'speed' => '1',
             'language' => 'en',
         ]);
 
@@ -119,6 +124,7 @@ class TextToSpeechTest extends TestCase
             'model' => 'tts-1',
             'voice' => 'alloyy',
             'response_format' => 'mp3',
+            'speed' => '1',
             'language' => 'en',
         ]);
 
@@ -132,6 +138,7 @@ class TextToSpeechTest extends TestCase
             'model' => 'tts-1',
             'voice' => 'alloy',
             'response_format' => 'mp33',
+            'speed' => '1',
             'language' => 'en',
         ]);
 
@@ -145,6 +152,7 @@ class TextToSpeechTest extends TestCase
             'model' => 'tts-1',
             'voice' => 'alloy',
             'response_format' => 'mp3',
+            'speed' => '1',
             'language' => 'eng',
         ]);
 
@@ -163,6 +171,7 @@ class TextToSpeechTest extends TestCase
             'input' => 'Hello, how are you?',
             'voice' => 'alloy',
             'response_format' => 'mp3',
+            'speed' => '1',
             'language' => 'en',
         ]);
 
