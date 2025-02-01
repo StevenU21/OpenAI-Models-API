@@ -141,6 +141,17 @@ class OpenAIService
         return response()->json($speech_text_response_formats);
     }
 
+    public function getSpeechTimestampGranularities(): JsonResponse
+    {
+        $speech_timestamp_granularities = [
+            'word',
+            'sentence',
+            'segment',
+        ];
+
+        return response()->json($speech_timestamp_granularities);
+    }
+
     public function conversation($text, $model, $temperature, $prompt = 'You are a friendly chatbot.'): JsonResponse
     {
         $messages = [
@@ -214,27 +225,29 @@ class OpenAIService
         return trim($response['choices'][0]['message']['content']);
     }
 
-    public function textToSpeech($text, $voice, $model = 'tts-1', $responseFormat = 'mp3', $language = 'en')
+    public function textToSpeech($text, $voice, $model = 'tts-1', $responseFormat = 'mp3', $speed = 1.0, $language = 'en')
     {
         $response = OpenAI::audio()->speech([
             'model' => $model,
             'input' => $text,
             'voice' => $voice,
             'response_format' => $responseFormat,
+            'speed' => $speed,
             'language' => $language,
         ]);
 
         return $response;
     }
 
-    public function textToSpeechStreamed($text, $voice, $model = 'tts-1', $responseFormat = 'mp3', $language = 'en')
+    public function textToSpeechStreamed($text, $voice, $model = 'tts-1', $responseFormat = 'mp3', $speed = 1.0, $language = 'en')
     {
-        return response()->stream(function () use ($text, $voice, $model, $responseFormat, $language) {
+        return response()->stream(function () use ($text, $voice, $model, $responseFormat, $speed, $language) {
             $stream = OpenAI::audio()->speechStreamed([
                 'model' => $model,
                 'input' => $text,
                 'voice' => $voice,
                 'response_format' => $responseFormat,
+                'speed' => $speed,
                 'language' => $language,
             ]);
 
@@ -250,14 +263,15 @@ class OpenAIService
         ]);
     }
 
-    public function speechToText($filePath, $language)
+    public function speechToText($filePath, $language, $response_format = 'verbose_json', $temperature = 0, $timestamp_granularities = 'segment')
     {
         $response = OpenAI::audio()->transcribe([
             'model' => 'whisper-1',
             'file' => fopen($filePath, 'r'),
             'language' => $language,
-            'response_format' => 'verbose_json',
-            ''
+            'response_format' => $response_format,
+            'temperature' => $temperature,
+            'timestamp_granularities[]' => $timestamp_granularities,
         ]);
 
         return $response;

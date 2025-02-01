@@ -23,9 +23,10 @@ class TextToSpeechRequest extends FormRequest
     {
         return [
             'model' => ['required', 'string', 'in:tts-1,tts-1-hd'],
-            'text' => ['required', 'string', 'min:3', 'max:3000'],
+            'text' => ['required', 'string', 'min:3', 'max:4096'],
             'voice' => ['required', 'string', 'in:alloy,ash,coral,echo,fable,onyx,nova,sage,shimmer'],
             'response_format' => ['string', 'in:mp3,opus,aac,flac,wav,pcm'],
+            'speed' => ['numeric', 'min:0.25', 'max:4.0'],
             'language' => ['string', 'in:af,ar,hy,az,be,bs,bg,ca,zh,hr,cs,da,nl,en,et,fi,fr,gl,de,el,he,hi,hu,is,id,it,ja,kn,kk,ko,lv,lt,mk,ms,mr,mi,ne,no,fa,pl,pt,ro,ru,sr,sk,sl,es,sw,sv,tl,ta,th,tr,uk,ur,vi,cy'],
         ];
     }
@@ -51,6 +52,9 @@ class TextToSpeechRequest extends FormRequest
             'response_format.string' => 'The response format must be a string.',
             'response_format.in' => 'The selected response format must be one of the following options: :in',
             'language.string' => 'The language must be a string.',
+            'speed.numeric' => 'The speed must be a number.',
+            'speed.min' => 'The speed must be at least :min.',
+            'speed.max' => 'The speed may not be greater than :max.',
             'language.in' => 'The selected language must be one of the following options: :in',
         ];
     }
