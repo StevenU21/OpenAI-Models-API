@@ -4,8 +4,6 @@ namespace Tests\Feature;
 
 use App\Services\OpenAIService;
 use Tests\TestCase;
-use OpenAI\Laravel\Facades\OpenAI;
-use OpenAI\Responses\Chat\CreateResponse;
 
 class TextToSpeechTest extends TestCase
 {
@@ -39,7 +37,7 @@ class TextToSpeechTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_validation_text_is_required()
+    public function test_validation_input_is_required()
     {
         $response = $this->post('/api/text-to-speech', [
             'model' => 'tts-1',
@@ -51,10 +49,10 @@ class TextToSpeechTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function test_validation_text_min()
+    public function test_validation_input_min()
     {
         $response = $this->post('/api/text-to-speech', [
-            'text' => 'H',
+            'input' => 'H',
             'model' => 'tts-1',
             'voice' => 'alloy',
             'response_format' => 'mp3',
@@ -64,10 +62,10 @@ class TextToSpeechTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function test_validation_text_max()
+    public function test_validation_input_max()
     {
         $response = $this->post('/api/text-to-speech', [
-            'text' => str_repeat('a', 3001),
+            'input' => str_repeat('a', 3001),
             'model' => 'tts-1',
             'voice' => 'alloy',
             'response_format' => 'mp3',
@@ -80,7 +78,7 @@ class TextToSpeechTest extends TestCase
     public function test_validation_model_is_required()
     {
         $response = $this->post('/api/text-to-speech', [
-            'text' => 'Hello, how are you?',
+            'input' => 'Hello, how are you?',
             'voice' => 'alloy',
             'response_format' => 'mp3',
             'language' => 'en',
@@ -92,7 +90,7 @@ class TextToSpeechTest extends TestCase
     public function test_validation_model_is_in()
     {
         $response = $this->post('/api/text-to-speech', [
-            'text' => 'Hello, how are you?',
+            'input' => 'Hello, how are you?',
             'model' => 'tts-2',
             'voice' => 'alloy',
             'response_format' => 'mp3',
@@ -105,7 +103,7 @@ class TextToSpeechTest extends TestCase
     public function test_validation_voice_is_required()
     {
         $response = $this->post('/api/text-to-speech', [
-            'text' => 'Hello, how are you?',
+            'input' => 'Hello, how are you?',
             'model' => 'tts-1',
             'response_format' => 'mp3',
             'language' => 'en',
@@ -117,7 +115,7 @@ class TextToSpeechTest extends TestCase
     public function test_validation_voice_is_in()
     {
         $response = $this->post('/api/text-to-speech', [
-            'text' => 'Hello, how are you?',
+            'input' => 'Hello, how are you?',
             'model' => 'tts-1',
             'voice' => 'alloyy',
             'response_format' => 'mp3',
@@ -130,7 +128,7 @@ class TextToSpeechTest extends TestCase
     public function test_validation_response_format_is_in()
     {
         $response = $this->post('/api/text-to-speech', [
-            'text' => 'Hello, how are you?',
+            'input' => 'Hello, how are you?',
             'model' => 'tts-1',
             'voice' => 'alloy',
             'response_format' => 'mp33',
@@ -143,7 +141,7 @@ class TextToSpeechTest extends TestCase
     public function test_validation_language_is_in()
     {
         $response = $this->post('/api/text-to-speech', [
-            'text' => 'Hello, how are you?',
+            'input' => 'Hello, how are you?',
             'model' => 'tts-1',
             'voice' => 'alloy',
             'response_format' => 'mp3',
@@ -162,7 +160,7 @@ class TextToSpeechTest extends TestCase
 
         $response = $this->postJson('/api/text-to-speech', [
             'model' => 'tts-1',
-            'text' => 'Hello, how are you?',
+            'input' => 'Hello, how are you?',
             'voice' => 'alloy',
             'response_format' => 'mp3',
             'language' => 'en',
@@ -171,7 +169,7 @@ class TextToSpeechTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertJsonStructure([
-            'text',
+            'input',
             'audio_url',
         ]);
     }
