@@ -5,6 +5,7 @@ use App\Http\Requests\SpeechToTextRequest;
 use App\Services\OpenAIService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class SpeechToTextController extends Controller
 {
@@ -32,24 +33,32 @@ class SpeechToTextController extends Controller
 
     public function SpeechToText(SpeechToTextRequest $request): JsonResponse
     {
+        $data = $request->validated();
         $file = $request->file('file');
-        $language = $request->validated()['language'];
-        $response_format = $request->validated()['response_format'];
-        $temperature = $request->validated()['temperature'];
-        $timestamp_granularities = $request->validated()['timestamp_granularities'];
 
-        $response = $this->OpenAIService->SpeechToText($file, $language, $response_format, $temperature, $timestamp_granularities);
+        // Store the audio file and get the URL
+        $audioFilePath = $file->store('request_speech_audios', 'public');
+        $audioUrl = Storage::disk('public')->url($audioFilePath);
 
-        // Guardar la transcripción en un archivo
-        $filePath = 'speech_transcriptions/' . uniqid() . '.txt';
-        Storage::disk('public')->put($filePath, (string) $response);
+        // Call the OpenAIService SpeechToText method
+        $response = $this->OpenAIService->SpeechToText(
+            $audioUrl,
+            $data['language'],
+            $data['response_format'],
+            $data['temperature'],
+            $data['timestamp_granularities']
+        );
 
-        // Generate the URL for the transcription file
-        $audioUrl = Storage::disk('public')->url($filePath);
+        // Store the transcription text in a file and get the URL
+        $transcriptionText = $response->text;
+        $transcriptionFilePath = 'speech_transcriptions/transcription_' . uniqid() . '.txt';
+        Storage::disk('public')->put($transcriptionFilePath, $transcriptionText);
+        $transcriptionUrl = Storage::disk('public')->url($transcriptionFilePath);
 
         return response()->json([
-            'transcription_response' => $response,
-            'transcription_url' => $audioUrl,
+            'transcription_response' => $transcriptionText,
+            'transcription_url' => $transcriptionUrl,
+            'audio_url' => $audioUrl,
         ]);
     }
 }
