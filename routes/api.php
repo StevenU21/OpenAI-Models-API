@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\SpeechToTextController;
 use App\Http\Controllers\TextToSpeechController;
 use App\Http\Controllers\TranslationController;
 use Illuminate\Http\Request;
@@ -34,8 +35,8 @@ Route::prefix('text-to-speech')->name('text-to-speech.')->group(function () {
 });
 
 Route::prefix('speech-to-text')->name('speech-to-text.')->group(function () {
-    Route::get('/languages', [TextToSpeechController::class, 'getSpeechLanguages'])->name('languages');
-    Route::get('/response-formats', [TextToSpeechController::class, 'getSpeechResponseFormats'])->name('response-formats');
-    Route::get('/timestamp-granularities', [TextToSpeechController::class, 'getSpeechTimestampGranularities'])->name('timestamp-granularities');
-    Route::post('/', [TextToSpeechController::class, 'speechToText'])->name('speech-to-text');
+    Route::get('/languages', [SpeechToTextController::class, 'getSpeechLanguages'])->name('languages');
+    Route::get('/response-formats', [SpeechToTextController::class, 'getSpeechResponseFormats'])->name('response-formats');
+    Route::get('/timestamp-granularities', [SpeechToTextController::class, 'getSpeechTimestampGranularities'])->name('timestamp-granularities');
+    Route::post('/', [SpeechToTextController::class, 'speechToText'])->name('speech-to-text');
 });
