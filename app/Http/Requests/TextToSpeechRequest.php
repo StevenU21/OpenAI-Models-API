@@ -23,7 +23,7 @@ class TextToSpeechRequest extends FormRequest
     {
         return [
             'model' => ['required', 'string', 'in:tts-1,tts-1-hd'],
-            'text' => ['required', 'string', 'min:3', 'max:4096'],
+            'input' => ['required', 'string', 'min:3', 'max:4096'],
             'voice' => ['required', 'string', 'in:alloy,ash,coral,echo,fable,onyx,nova,sage,shimmer'],
             'response_format' => ['string', 'in:mp3,opus,aac,flac,wav,pcm'],
             'speed' => ['numeric', 'min:0.25', 'max:4.0'],
@@ -42,10 +42,10 @@ class TextToSpeechRequest extends FormRequest
             'model.required' => 'The model is required.',
             'model.string' => 'The model must be a string.',
             'model.in' => 'The selected model is invalid.',
-            'text.required' => 'The text is required.',
-            'text.string' => 'The text must be a string.',
-            'text.min' => 'The text must be at least :min characters.',
-            'text.max' => 'The text may not be greater than :max characters.',
+            'input.required' => 'The input is required.',
+            'input.string' => 'The input must be a string.',
+            'input.min' => 'The input must be at least :min characters.',
+            'input.max' => 'The input may not be greater than :max characters.',
             'voice.required' => 'The voice is required.',
             'voice.string' => 'The voice must be a string.',
             'voice.in' => 'The selected voice must be one of the following options: :in.',

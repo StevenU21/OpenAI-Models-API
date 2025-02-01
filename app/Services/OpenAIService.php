@@ -225,11 +225,11 @@ class OpenAIService
         return trim($response['choices'][0]['message']['content']);
     }
 
-    public function textToSpeech($text, $voice, $model = 'tts-1', $responseFormat = 'mp3', $speed = 1.0, $language = 'en')
+    public function textToSpeech($input, $voice, $model = 'tts-1', $responseFormat = 'mp3', $speed = 1.0, $language = 'en')
     {
         $response = OpenAI::audio()->speech([
             'model' => $model,
-            'input' => $text,
+            'input' => $input,
             'voice' => $voice,
             'response_format' => $responseFormat,
             'speed' => $speed,
@@ -239,12 +239,12 @@ class OpenAIService
         return $response;
     }
 
-    public function textToSpeechStreamed($text, $voice, $model = 'tts-1', $responseFormat = 'mp3', $speed = 1.0, $language = 'en')
+    public function textToSpeechStreamed($input, $voice, $model = 'tts-1', $responseFormat = 'mp3', $speed = 1.0, $language = 'en')
     {
-        return response()->stream(function () use ($text, $voice, $model, $responseFormat, $speed, $language) {
+        return response()->stream(function () use ($input, $voice, $model, $responseFormat, $speed, $language) {
             $stream = OpenAI::audio()->speechStreamed([
                 'model' => $model,
-                'input' => $text,
+                'input' => $input,
                 'voice' => $voice,
                 'response_format' => $responseFormat,
                 'speed' => $speed,
