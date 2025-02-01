@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ChatRequest;
 use App\Http\Requests\TextToSpeechRequest;
 use App\Services\OpenAIService;
 use Illuminate\Http\JsonResponse;
@@ -45,12 +44,12 @@ class TextToSpeechController extends Controller
     public function textToSpeech(TextToSpeechRequest $request): JsonResponse
     {
         $model = $request->validated()['model'];
-        $text = $request->validated()['text'];
+        $input = $request->validated()['input'];
         $voice = $request->validated()['voice'];
         $response_format = $request->validated()['response_format'];
         $language = $request->validated()['language'];
 
-        $response = $this->OpenAIService->textToSpeech($text, $voice, $model, $response_format, $language);
+        $response = $this->OpenAIService->textToSpeech($input, $voice, $model, $response_format, $language);
 
         // Save audio file
         $audioPath = 'speech_audios/' . uniqid() . '.' . $response_format;
@@ -60,7 +59,7 @@ class TextToSpeechController extends Controller
         $audioUrl = Storage::disk('public')->url($audioPath);
 
         return response()->json([
-            'text' => $text,
+            'input' => $input,
             'audio_url' => $audioUrl,
         ]);
     }
@@ -82,7 +81,6 @@ class TextToSpeechController extends Controller
     public function textToSpeechStreamed(TextToSpeechRequest $request)
     {
         $validated = $request->validated();
-
-        return $this->OpenAIService->textToSpeechStreamed($validated['text'], $validated['voice'], $validated['model'], $validated['response_format'], $validated['language']);
+        return $this->OpenAIService->textToSpeechStreamed($validated['input'], $validated['voice'], $validated['model'], $validated['response_format'], $validated['language']);
     }
 }
