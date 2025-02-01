@@ -32,3 +32,10 @@ Route::prefix('text-to-speech')->name('text-to-speech.')->group(function () {
     Route::get('/generated-audio', [TextToSpeechController::class, 'getGeneratedSpeechAudios'])->name('generate-audio');
     Route::post('/streamed', [TextToSpeechController::class, 'textToSpeechStreamed'])->name('streamed');
 });
+
+Route::prefix('speech-to-text')->name('speech-to-text.')->group(function () {
+    Route::get('/languages', [TextToSpeechController::class, 'getSpeechLanguages'])->name('languages');
+    Route::get('/response-formats', [TextToSpeechController::class, 'getSpeechResponseFormats'])->name('response-formats');
+    Route::get('/timestamp-granularities', [TextToSpeechController::class, 'getSpeechTimestampGranularities'])->name('timestamp-granularities');
+    Route::post('/', [TextToSpeechController::class, 'speechToText'])->name('speech-to-text');
+});
