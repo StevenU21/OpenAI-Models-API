@@ -4,7 +4,6 @@ namespace App\Services;
 
 use Illuminate\Http\JsonResponse;
 use OpenAI\Laravel\Facades\OpenAI;
-use GuzzleHttp\Client;
 use Illuminate\Support\Facades\File;
 
 class OpenAIService

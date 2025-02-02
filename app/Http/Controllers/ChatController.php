@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ChatRequest;
 use App\Services\OpenAIService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
 class ChatController extends Controller
