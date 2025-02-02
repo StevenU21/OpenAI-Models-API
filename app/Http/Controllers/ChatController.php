@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests\ChatRequest;
-use App\Http\Requests\TranslationRequest;
 use App\Services\OpenAIService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
 
 class ChatController extends Controller
 {
@@ -43,5 +43,15 @@ class ChatController extends Controller
         $prompt = $request->validated()['prompt'];
 
         return $this->OpenAIService->streamedConversationSSE($text, $model, $temperature, $prompt);
+    }
+
+    public function image_conversation(ChatRequest $request)
+    {
+        $image = $request->file('image');
+
+        $imagefilePath = $image->store('converation_images', 'public');
+        $imageUrl = Storage::disk('public')->url($imagefilePath);
+
+        return $this->OpenAIService->file_image_conversation($imageUrl);
     }
 }

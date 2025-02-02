@@ -16,6 +16,7 @@ Route::prefix('chat')->name('chat.')->group(function () {
     Route::get('/prompts', [ChatController::class, 'getPrompts'])->name('prompts');
     Route::post('/', [ChatController::class, 'conversation'])->name('conversation');
     Route::post('/streamed', [ChatController::class, 'streamed_conversation_sse'])->name('streamed.conversation');
+    Route::post('/image', [ChatController::class, 'image_conversation'])->name('image.conversation');
 });
 
 Route::prefix('translation')->name('translation.')->group(function () {
