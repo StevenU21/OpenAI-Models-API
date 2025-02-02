@@ -210,21 +210,18 @@ class OpenAIService
 
     public function file_image_conversation($imageUrl): JsonResponse
     {
-        $messages = [
-            ['role' => 'system', 'content' => 'You are an expert AI assistant specialized in analyzing and describing images. Provide detailed and accurate descriptions of the content in the images.'],
-            [
-                'role' => 'user',
-                'content' => [
-                    ['type' => 'text', 'text' => "What's in this image?"],
-                    ['type' => 'image_url', 'image_url' => ['url' => $imageUrl]],
-                ]
-            ]
-        ];
-
         $response = OpenAI::chat()->create([
             'model' => 'gpt-4o',
-            'messages' => $messages,
-            'temperature' => 0.7,
+            'messages' => [
+                [
+                    'role' => 'user',
+                    'content' => [
+                        ['type' => 'text', 'text' => "What's in this image?"],
+                        ['type' => 'image_url', 'image_url' => ['url' => $imageUrl]],
+                    ],
+                ],
+            ],
+            'store' => true,
         ]);
 
         return response()->json([
