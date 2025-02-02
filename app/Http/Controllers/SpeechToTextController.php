@@ -36,11 +36,9 @@ class SpeechToTextController extends Controller
         $data = $request->validated();
         $file = $request->file('file');
 
-        // Store the audio file and get the URL
         $audioFilePath = $file->store('request_speech_audios', 'public');
         $audioUrl = Storage::disk('public')->url($audioFilePath);
 
-        // Call the OpenAIService SpeechToText method
         $response = $this->OpenAIService->SpeechToText(
             $audioUrl,
             $data['language'],
@@ -49,7 +47,6 @@ class SpeechToTextController extends Controller
             $data['timestamp_granularities']
         );
 
-        // Store the transcription text in a file and get the URL
         $transcriptionText = $response->text;
         $transcriptionFilePath = 'speech_transcriptions/transcription_' . uniqid() . '.txt';
         Storage::disk('public')->put($transcriptionFilePath, $transcriptionText);
