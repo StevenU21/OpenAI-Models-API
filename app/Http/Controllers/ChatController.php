@@ -5,6 +5,7 @@ use App\Http\Requests\ChatRequest;
 use App\Services\OpenAIService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
+use Request;
 
 class ChatController extends Controller
 {
@@ -45,8 +46,12 @@ class ChatController extends Controller
         return $this->OpenAIService->streamedConversationSSE($text, $model, $temperature, $prompt);
     }
 
-    public function image_conversation(ChatRequest $request)
+    public function image_conversation(Request $request)
     {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
         $image = $request->file('image');
 
         $imagefilePath = $image->store('converation_images', 'public');
