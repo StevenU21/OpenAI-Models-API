@@ -285,19 +285,19 @@ class OpenAIService
         ]);
     }
 
-    public function speechToText($filePath, $language, $response_format = 'verbose_json', $temperature = 0, $timestamp_granularities = 'segment')
+    public function getSpeechToTextActions()
     {
-        return $this->processAudio($filePath, $language, $response_format, $temperature, $timestamp_granularities, 'transcribe');
+        $actions = [
+            'transcribe',
+            'translate'
+        ];
+
+        return response()->json($actions);
     }
 
-    public function translate_audio($filePath, $language, $response_format = 'verbose_json', $temperature = 0, $timestamp_granularities = 'segment')
+    public function speechToText($filePath, $language, $response_format = 'verbose_json', $temperature = 0, $timestamp_granularities = 'segment', $action)
     {
-        return $this->processAudio($filePath, $language, $response_format, $temperature, $timestamp_granularities, 'translate');
-    }
-
-    private function processAudio($filePath, $language, $response_format, $temperature, $timestamp_granularities, $action)
-    {
-        return OpenAI::audio()->$action([
+        $response = OpenAI::audio()->$action([
             'model' => 'whisper-1',
             'file' => fopen($filePath, 'r'),
             'language' => $language,
@@ -305,5 +305,7 @@ class OpenAIService
             'temperature' => $temperature,
             'timestamp_granularities[]' => $timestamp_granularities,
         ]);
+
+        return $response;
     }
 }
