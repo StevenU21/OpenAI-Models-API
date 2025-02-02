@@ -287,12 +287,12 @@ class OpenAIService
 
     public function getSpeechToTextActions()
     {
-        $actions = [
+        $action = [
             'transcribe',
             'translate'
         ];
 
-        return response()->json($actions);
+        return response()->json($action);
     }
 
     public function speechToText($filePath, $language, $response_format = 'verbose_json', $temperature = 0, $timestamp_granularities = 'segment', $action)

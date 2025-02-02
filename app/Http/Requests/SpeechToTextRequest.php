@@ -27,6 +27,7 @@ class SpeechToTextRequest extends FormRequest
             'response_format' => ['string', 'in:json,text,srt,verbose_json,vtt'],
             'temperature' => ['numeric', 'min:0', 'max:1'],
             'timestamp_granularities' => ['string', 'in:word,segment'],
+            'action' => ['required', 'string', 'in:transcribe,translate'],
         ];
     }
 

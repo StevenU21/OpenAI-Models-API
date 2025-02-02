@@ -30,10 +30,16 @@ class SpeechToTextController extends Controller
         return $this->OpenAIService->getSpeechTimestampGranularities();
     }
 
+    public function getSpeechToTextActions(): JsonResponse
+    {
+        return $this->OpenAIService->getSpeechToTextActions();
+    }
+
     public function SpeechToText(SpeechToTextRequest $request): JsonResponse
     {
         $data = $request->validated();
         $file = $request->file('file');
+        $action = $data['action'];
 
         $audioFilePath = $file->store('request_speech_audios', 'public');
         $audioUrl = Storage::disk('public')->url($audioFilePath);
@@ -43,17 +49,18 @@ class SpeechToTextController extends Controller
             $data['language'],
             $data['response_format'],
             $data['temperature'],
-            $data['timestamp_granularities']
+            $data['timestamp_granularities'],
+            $action
         );
 
-        $transcriptionText = $response->text;
-        $transcriptionFilePath = 'speech_transcriptions/transcription_' . uniqid() . '.txt';
-        Storage::disk('public')->put($transcriptionFilePath, $transcriptionText);
-        $transcriptionUrl = Storage::disk('public')->url($transcriptionFilePath);
+        $actionText = $response->text;
+        $actionFilePath = 'speech_' . $action . '/' . $action . '_' . uniqid() . '.txt';
+        Storage::disk('public')->put($actionFilePath, $actionText);
+        $actionUrl = Storage::disk('public')->url($actionFilePath);
 
         return response()->json([
-            'transcription_response' => $transcriptionText,
-            'transcription_url' => $transcriptionUrl,
+            $action . '_response' => $actionText,
+            $action . '_url' => $actionUrl,
             'audio_url' => $audioUrl,
         ]);
     }
