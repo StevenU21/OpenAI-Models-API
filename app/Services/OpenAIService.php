@@ -285,19 +285,9 @@ class OpenAIService
         ]);
     }
 
-    public function getSpeechToTextActions()
+    public function speechToText($filePath, $language, $response_format = 'verbose_json', $temperature = 0, $timestamp_granularities = 'segment')
     {
-        $action = [
-            'transcribe',
-            'translate'
-        ];
-
-        return response()->json($action);
-    }
-
-    public function speechToText($filePath, $language, $response_format = 'verbose_json', $temperature = 0, $timestamp_granularities = 'segment', $action)
-    {
-        $response = OpenAI::audio()->$action([
+        $response = OpenAI::audio()->transcribe([
             'model' => 'whisper-1',
             'file' => fopen($filePath, 'r'),
             'language' => $language,

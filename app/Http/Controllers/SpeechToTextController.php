@@ -30,16 +30,11 @@ class SpeechToTextController extends Controller
         return $this->OpenAIService->getSpeechTimestampGranularities();
     }
 
-    public function getSpeechToTextActions(): JsonResponse
-    {
-        return $this->OpenAIService->getSpeechToTextActions();
-    }
-
     public function SpeechToText(SpeechToTextRequest $request): JsonResponse
     {
         $data = $request->validated();
         $file = $request->file('file');
-        $action = $data['action'];
+        $action = 'transcription';
 
         $audioFilePath = $file->store('speech_text_audios', 'public');
         $audioUrl = Storage::disk('public')->url($audioFilePath);
@@ -50,7 +45,6 @@ class SpeechToTextController extends Controller
             $data['response_format'],
             $data['temperature'],
             $data['timestamp_granularities'],
-            $action
         );
 
         $actionText = $response->text;
