@@ -354,7 +354,7 @@ class OpenAIService
     {
         $image_response_formats = [
             'url',
-            'base64',
+            'b64_json',
         ];
 
         return response()->json($image_response_formats);
