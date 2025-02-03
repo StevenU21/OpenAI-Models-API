@@ -298,4 +298,66 @@ class OpenAIService
 
         return $response;
     }
+
+    public function getImageModels(): JsonResponse
+    {
+        $images = [
+            'dall-e-2',
+            'dall-e-3'
+        ];
+
+        return response()->json($images);
+    }
+
+    public function getImageQuality(): JsonResponse
+    {
+        $image_quality = [
+            'standard',
+            'hd'
+        ];
+
+        return response()->json($image_quality);
+    }
+
+    public function getImageSizes(): JsonResponse
+    {
+        $image_sizes = [
+            '256x256',
+            '512x512',
+            '1024x1024',
+            '1024x1792',
+            '1792x1024'
+        ];
+
+        return response()->json($image_sizes);
+    }
+
+    public function getImageStyle()
+    {
+        $styleDescriptions = [
+            'realistic' => 'with photorealistic details and natural lighting',
+            'anime' => 'with vibrant colors, anime-style shading, and expressive characters',
+            'cartoon' => 'with bold lines, simple shapes, and bright colors',
+            'futuristic' => 'featuring advanced technology and a sci-fi atmosphere',
+            'abstract' => 'with surreal and abstract forms, blending colors and shapes uniquely',
+        ];
+
+        return response()->json($styleDescriptions);
+    }
+
+    public function textToImage($model, $prompt, $size = '512x512', $quality = 'medium')
+    {
+        $response = OpenAI::images()->create([
+            'model' => $model,
+            'prompt' => $prompt,
+            'size' => $size,
+            'quality' => $quality,
+            'response_format' => 'url',
+        ]);
+
+        return [
+            'url' => $response['data'][0]['url'],
+            'prompt' => $prompt,
+        ];
+    }
 }
