@@ -332,9 +332,9 @@ class OpenAIService
         return response()->json($image_sizes);
     }
 
-    public function getImageStyle()
+    public function getImagePrompt(): JsonResponse
     {
-        $styleDescriptions = [
+        $promptDescriptions = [
             'realistic' => 'with photorealistic details and natural lighting',
             'anime' => 'with vibrant colors, anime-style shading, and expressive characters',
             'cartoon' => 'with bold lines, simple shapes, and bright colors',
@@ -347,17 +347,39 @@ class OpenAIService
             'steampunk' => 'with Victorian-era aesthetics and steam-powered machinery',
         ];
 
-        return response()->json($styleDescriptions);
+        return response()->json($promptDescriptions);
     }
 
-    public function textToImage($model, $prompt, $size = '512x512', $quality = 'medium')
+    public function getImageResponseFormats(): JsonResponse
+    {
+        $image_response_formats = [
+            'url',
+            'base64',
+        ];
+
+        return response()->json($image_response_formats);
+    }
+
+    public function getImageStyle(): JsonResponse
+    {
+        $image_style = [
+            'vivid',
+            'narutal'
+        ];
+
+        return response()->json($image_style);
+    }
+
+    public function textToImage($model, $prompt, $image_number = 1, $quality, $size, $response_format, $style): array
     {
         $response = OpenAI::images()->create([
             'model' => $model,
             'prompt' => $prompt,
-            'size' => $size,
+            'n' => $image_number,
             'quality' => $quality,
-            'response_format' => 'url',
+            'size' => $size,
+            'response_format' => $response_format,
+            'style' => $style,
         ]);
 
         return [
