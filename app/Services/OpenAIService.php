@@ -364,7 +364,7 @@ class OpenAIService
     {
         $image_style = [
             'vivid',
-            'narutal'
+            'natural'
         ];
 
         return response()->json($image_style);
