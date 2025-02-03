@@ -53,26 +53,34 @@ class TextToSpeechController extends Controller
         $response = $this->OpenAIService->textToSpeech($input, $voice, $model, $response_format, $speed, $language);
 
         // Save audio file
-        $audioPath = 'speech_audios/' . uniqid() . '.' . $response_format;
+        $audioPath = 'audio_speech_audios/' . uniqid() . '.' . $response_format;
         Storage::disk('public')->put($audioPath, $response);
+
+        // Save the input text
+        $textPath = 'text_speech_audios/' . uniqid() . '.' . 'txt';
+        Storage::disk('public')->put($textPath, $input);
 
         // Generate the URL for the audio file
         $audioUrl = Storage::disk('public')->url($audioPath);
+        $textUrl = Storage::disk('public')->url($audioPath);
 
         return response()->json([
             'input' => $input,
             'audio_url' => $audioUrl,
+            'text_url' => $textUrl,
         ]);
     }
 
     public function getGeneratedSpeechAudios(): JsonResponse
     {
-        $audioFiles = Storage::disk('public')->files('speech_audios');
+        $audioFiles = Storage::disk('public')->files('audio_speech_audios');
+        $textFiles = Storage::disk('public')->files('text_speech_audios');
 
         $audioData = array_map(function ($file) {
             return [
                 'name' => basename($file),
                 'audio_url' => Storage::disk('public')->url($file),
+                'text_url' => Storage::disk('public')->url('text_speech_audios/' . basename($file)),
             ];
         }, $audioFiles);
 

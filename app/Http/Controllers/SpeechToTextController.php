@@ -41,7 +41,7 @@ class SpeechToTextController extends Controller
         $file = $request->file('file');
         $action = $data['action'];
 
-        $audioFilePath = $file->store('request_speech_audios', 'public');
+        $audioFilePath = $file->store('speech_text_audios', 'public');
         $audioUrl = Storage::disk('public')->url($audioFilePath);
 
         $response = $this->OpenAIService->SpeechToText(
@@ -54,7 +54,7 @@ class SpeechToTextController extends Controller
         );
 
         $actionText = $response->text;
-        $actionFilePath = 'speech_' . $action . '/' . $action . '_' . uniqid() . '.txt';
+        $actionFilePath = 'speech_text_' . $action . '/' . $action . '_' . uniqid() . '.txt';
         Storage::disk('public')->put($actionFilePath, $actionText);
         $actionUrl = Storage::disk('public')->url($actionFilePath);
 
