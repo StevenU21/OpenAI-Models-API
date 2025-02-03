@@ -39,5 +39,6 @@ Route::prefix('speech-to-text')->name('speech-to-text.')->group(function () {
     Route::get('/languages', [SpeechToTextController::class, 'getSpeechLanguages'])->name('languages');
     Route::get('/response-formats', [SpeechToTextController::class, 'getSpeechTextResponseFormats'])->name('response-formats');
     Route::get('/timestamp-granularities', [SpeechToTextController::class, 'getSpeechTimestampGranularities'])->name('timestamp-granularities');
+    Route::get('/actions', [SpeechToTextController::class, 'getSpeechToTextActions'])->name('actions');
     Route::post('/', [SpeechToTextController::class, 'speechToText'])->name('speech-to-text');
 });
