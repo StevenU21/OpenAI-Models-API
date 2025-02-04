@@ -382,9 +382,14 @@ class OpenAIService
             'style' => $style,
         ]);
 
-        return [
-            'url' => $response['data'][0]['url'],
-            'prompt' => $prompt,
-        ];
+        $images = [];
+        foreach ($response['data'] as $data) {
+            $images[] = [
+                'url' => $data['url'],
+                'b64_json' => $data['b64_json'] ?? null,
+            ];
+        }
+
+        return $images;
     }
 }

@@ -57,7 +57,7 @@ class TextToImageController extends Controller
         $response_format = $request->validated()['response_format'];
         $style = $request->validated()['style'];
 
-        $response = $this->OpenAIService->textToImage(
+        $responses = $this->OpenAIService->textToImage(
             $model,
             $prompt,
             $image_number,
@@ -67,17 +67,21 @@ class TextToImageController extends Controller
             $style
         );
 
-        if ($response_format === 'url') {
-            // Save image file from URL
-            $imageUrl = $response['url'];
-            $imageContent = Http::get($imageUrl)->body();
-        } elseif ($response_format === 'b64_json') {
-            // Save image file from base64
-            $imageContent = base64_decode($response['b64_json']);
-        }
+        $imageUrls = [];
+        foreach ($responses as $response) {
+            if ($response_format === 'url') {
+                // Save image file from URL
+                $imageUrl = $response['url'];
+                $imageContent = Http::get($imageUrl)->body();
+            } elseif ($response_format === 'b64_json') {
+                // Save image file from base64
+                $imageContent = base64_decode($response['b64_json']);
+            }
 
-        $imagePath = 'text_image_images/' . uniqid() . '.' . 'png';
-        Storage::disk('public')->put($imagePath, $imageContent);
+            $imagePath = 'text_image_images/' . uniqid() . '.' . 'png';
+            Storage::disk('public')->put($imagePath, $imageContent);
+            $imageUrls[] = Storage::disk('public')->url($imagePath);
+        }
 
         // Save the input text
         $textPath = 'text_image_texts/' . uniqid() . '.' . 'txt';
@@ -86,7 +90,7 @@ class TextToImageController extends Controller
         return response()->json(
             [
                 'prompt' => $prompt,
-                'image_url' => Storage::disk('public')->url($imagePath),
+                'image_urls' => $imageUrls,
                 'text_url' => Storage::disk('public')->url($textPath),
             ]
         );

@@ -30,7 +30,7 @@ class TextToImageRequest extends FormRequest
             'style' => ['string'],
             'size' => ['required', 'string'],
             'response_format' => ['string', 'in:url,b64_json'],
-            'quality' => ['string'],
+            'quality' => ['nullable', 'string'],
         ];
     }
 
