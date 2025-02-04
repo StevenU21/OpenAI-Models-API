@@ -28,7 +28,7 @@ class TextToImageRequest extends FormRequest
             'prompt' => ['required', 'string', 'min:8'],
             'type' => ['required', 'string', 'in:realistic,anime,cartoon,futuristic,abstract,impressionist,pixel art,watercolor,noir,steampunk,fantasy,vintage,scifi,minimalist,hyperrealistic,dramatic'],
             'image_number' => ['integer', 'min:1', 'max:10'],
-            'style' => ['string'],
+            'style' => ['nullable', 'string'],
             'size' => ['required', 'string'],
             'response_format' => ['string', 'in:url,b64_json'],
             'quality' => ['nullable', 'string'],
