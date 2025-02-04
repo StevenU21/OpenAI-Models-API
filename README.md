@@ -1,67 +1,446 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# API de Integración OpenAI con Laravel 11
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Esta API fue desarrollada en **Laravel 11** y utiliza el paquete **laravel open ai** para integrar los servicios principales de OpenAI, tales como:
 
-## About Laravel
+- **Chatbot de Text (GPT-4o)**
+- **Chat con Images (GPT-4o)**
+- **Transcripción (Text-to-Speech: tts-1 / tts-1-hd)**  
+- **Conversión de voz a texto (Speech-to-Text: Whisper)**  
+- **Generación de imágenes (Text-to-Image con DALL·E 2 y DALL·E 3)**  
+- **Traducción de textos**
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+La documentación se basa en la [documentación oficial de OpenAI](https://platform.openai.com/docs) y en las validaciones definidas en cada Request. Este README ofrece una descripción detallada de cada funcionalidad, los endpoints disponibles, las validaciones aplicadas y las instrucciones para la instalación y uso del proyecto.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Índice
 
-## Learning Laravel
+- [Instalación](#instalación)
+- [Configuración](#configuración)
+- [Endpoints](#endpoints)
+  - [Chat](#chat)
+  - [Traducción](#traducción)
+  - [Text-to-Speech](#text-to-speech)
+  - [Speech-to-Text](#speech-to-text)
+  - [Text-to-Image](#text-to-image)
+- [Validaciones y Reglas de Request](#validaciones-y-reglas-de-request)
+- [Ejemplos de Uso](#ejemplos-de-uso)
+- [Referencias](#referencias)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Instalación
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. **Clonar el repositorio**
 
-## Laravel Sponsors
+   ```bash
+   git clone https://github.com/StevenU21/OpenAI-Models-API.git
+   cd OpenAI-Models-API
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+2. **Instalar dependencias**
 
-### Premium Partners
+   Asegúrate de tener Composer instalado y ejecuta:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+   ```bash
+   composer install
+   ```
 
-## Contributing
+3. **Configurar el entorno**
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+   Copia el archivo `.env.example` a `.env` y configura las variables de entorno (incluyendo las credenciales de OpenAI y la configuración de la base de datos):
 
-## Code of Conduct
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+4. **Migrar la base de datos (si aplica)**
 
-## Security Vulnerabilities
+   ```bash
+   php artisan migrate
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+5. **Levantar el servidor**
 
-## License
+   ```bash
+   php artisan serve
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-"# OpenAI-Models-API" 
+---
+
+## Configuración
+
+- **OpenAI API Key:**  
+  Configura la variable `OPENAI_API_KEY` en el archivo `.env` con tu clave de API de OpenAI.
+
+- **Paquete laravel open ai:**  
+  El paquete se encarga de gestionar las solicitudes hacia los servicios de OpenAI. Revisa la [documentación oficial del paquete](https://github.com/laravel-open-ai) para más detalles de configuración avanzada.
+
+---
+
+## Endpoints
+
+La API se organiza en diferentes grupos de rutas. A continuación se detalla cada uno de los endpoints y su funcionalidad.
+
+### Chat
+
+Permite interactuar con el servicio de chatbot, obtener modelos disponibles, prompts y generar conversaciones.
+
+- **GET `/api/chat/models`**  
+  _Descripción:_ Retorna la lista de modelos disponibles para el chatbot.  
+  _Nombre de la ruta:_ `chat.models`
+
+- **GET `/api/chat/prompts`**  
+  _Descripción:_ Obtiene una colección de prompts predefinidos.  
+  _Nombre de la ruta:_ `chat.prompts`
+
+- **POST `/api/chat`**  
+  _Descripción:_ Envía un mensaje para iniciar una conversación.  
+  _Nombre de la ruta:_ `chat.conversation`  
+  _Validaciones:_  
+  - `text`: requerido, cadena de texto (mín. 3, máx. 1000 caracteres)  
+  - `model`: requerido, cadena  
+  - `temperature`: requerido, numérico (entre 0 y 1.4)  
+  - `prompt`: requerido, cadena
+
+- **POST `/api/chat/streamed`**  
+  _Descripción:_ Envía una solicitud de conversación con respuesta en tiempo real vía SSE.  
+  _Nombre de la ruta:_ `chat.streamed.conversation`
+
+- **POST `/api/chat/image`**  
+  _Descripción:_ Genera imágenes basadas en una conversación o prompt.  
+  _Nombre de la ruta:_ `chat.image.conversation`
+
+### Traducción
+
+Permite traducir textos entre diferentes idiomas.
+
+- **GET `/api/translation/languages`**  
+  _Descripción:_ Obtiene la lista de idiomas disponibles para traducción.  
+  _Nombre de la ruta:_ `translation.languages`
+
+- **POST `/api/translation`**  
+  _Descripción:_ Traduce un texto del idioma de origen al de destino.  
+  _Nombre de la ruta:_ `translation.translate`  
+  _Validaciones:_  
+  - `text`: requerido, cadena (máx. 1000 caracteres)  
+  - `source_language`: requerido, cadena (máximo 2 caracteres, debe ser diferente al target)  
+  - `target_language`: requerido, cadena (máximo 2 caracteres, debe ser diferente al source)
+
+### Text-to-Speech
+
+Convierte texto a audio utilizando modelos de TTS.
+
+- **GET `/api/text-to-speech/models`**  
+  _Descripción:_ Lista de modelos disponibles para Text-to-Speech.  
+  _Nombre de la ruta:_ `text-to-speech.models`
+
+- **GET `/api/text-to-speech/voices`**  
+  _Descripción:_ Lista de voces disponibles.  
+  _Nombre de la ruta:_ `text-to-speech.voices`
+
+- **GET `/api/text-to-speech/voices/audio`**  
+  _Descripción:_ Retorna ejemplos de audio de las voces disponibles.  
+  _Nombre de la ruta:_ `text-to-speech.voices.audio`
+
+- **GET `/api/text-to-speech/languages`**  
+  _Descripción:_ Obtiene los idiomas soportados para la conversión.  
+  _Nombre de la ruta:_ `text-to-speech.languages`
+
+- **GET `/api/text-to-speech/response-formats`**  
+  _Descripción:_ Lista de formatos de respuesta disponibles (mp3, opus, aac, flac, wav, pcm).  
+  _Nombre de la ruta:_ `text-to-speech.response-formats`
+
+- **POST `/api/text-to-speech`**  
+  _Descripción:_ Convierte un texto en audio.  
+  _Nombre de la ruta:_ `text-to-speech.text-to-speech`  
+  _Validaciones:_  
+  - `model`: requerido, cadena, valores permitidos: `tts-1, tts-1-hd`  
+  - `input`: requerido, cadena (mín. 3, máx. 4096 caracteres)  
+  - `voice`: requerido, cadena (valores permitidos: `alloy, ash, coral, echo, fable, onyx, nova, sage, shimmer`)  
+  - `response_format`: cadena, valores permitidos: `mp3, opus, aac, flac, wav, pcm`  
+  - `speed`: numérico (entre 0.25 y 4.0)  
+  - `language`: cadena (debe pertenecer a la lista de idiomas soportados)
+
+- **GET `/api/text-to-speech/generated-audio`**  
+  _Descripción:_ Recupera los audios generados previamente.  
+  _Nombre de la ruta:_ `text-to-speech.generate-audio`
+
+- **POST `/api/text-to-speech/streamed`**  
+  _Descripción:_ Convierte texto a audio con respuesta en streaming.  
+  _Nombre de la ruta:_ `text-to-speech.streamed`
+
+### Speech-to-Text
+
+Convierte archivos de audio a texto.
+
+- **GET `/api/speech-to-text/languages`**  
+  _Descripción:_ Lista de idiomas disponibles para Speech-to-Text.  
+  _Nombre de la ruta:_ `speech-to-text.languages`
+
+- **GET `/api/speech-to-text/response-formats`**  
+  _Descripción:_ Formatos de respuesta permitidos (json, text, srt, verbose_json, vtt).  
+  _Nombre de la ruta:_ `speech-to-text.response-formats`
+
+- **GET `/api/speech-to-text/timestamp-granularities`**  
+  _Descripción:_ Opciones de granularidad para los timestamps (word, segment).  
+  _Nombre de la ruta:_ `speech-to-text.timestamp-granularities`
+
+- **GET `/api/speech-to-text/actions`**  
+  _Descripción:_ Acciones soportadas para Speech-to-Text.  
+  _Nombre de la ruta:_ `speech-to-text.actions`
+
+- **POST `/api/speech-to-text`**  
+  _Descripción:_ Convierte un archivo de audio a texto.  
+  _Validaciones:_  
+  - `file`: requerido, debe ser un archivo con extensión `mp3, mp4, mpeg, mpga, m4a, wav, webm` y máximo de 25MB.  
+  - `language`: cadena, debe pertenecer a un listado de idiomas (por ejemplo: en, es, fr, etc.).  
+  - `response_format`: cadena, valores permitidos: `json, text, srt, verbose_json, vtt`  
+  - `temperature`: numérico (entre 0 y 1)  
+  - `timestamp_granularities`: requerido si `response_format` es `verbose_json`, valores: `word, segment`
+
+### Text-to-Image
+
+Genera imágenes a partir de descripciones en texto utilizando los modelos de DALL·E.
+
+- **GET `/api/text-to-image/models`**  
+  _Descripción:_ Lista de modelos disponibles: `dall-e-2` y `dall-e-3`.  
+  _Nombre de la ruta:_ `text-to-image.models`
+
+- **GET `/api/text-to-image/quality`**  
+  _Descripción:_ Opciones de calidad de imagen (por ejemplo, `standard` o `hd` según el modelo).  
+  _Nombre de la ruta:_ `text-to-image.quality`
+
+- **GET `/api/text-to-image/sizes`**  
+  _Descripción:_ Tamaños permitidos para las imágenes.  
+  _Nombre de la ruta:_ `text-to-image.sizes`
+
+- **GET `/api/text-to-image/prompt`**  
+  _Descripción:_ Tipos de prompt soportados para la generación de imágenes.  
+  _Nombre de la ruta:_ `text-to-image.prompt`
+
+- **GET `/api/text-to-image/response-formats`**  
+  _Descripción:_ Formatos de respuesta (por ejemplo, URL o b64_json).  
+  _Nombre de la ruta:_ `text-to-image.response-formats`
+
+- **GET `/api/text-to-image/style`**  
+  _Descripción:_ Estilos disponibles para la generación de imágenes (por ejemplo, realista, anime, cartoon, etc.).  
+  _Nombre de la ruta:_ `text-to-image.style`
+
+- **POST `/api/text-to-image`**  
+  _Descripción:_ Genera una imagen a partir de un prompt.  
+  _Validaciones:_  
+  - `model`: requerido, valores permitidos: `dall-e-2, dall-e-3`  
+  - `prompt`: requerido, cadena (mín. 8 caracteres). Además, se valida la longitud máxima:
+    - Máximo 1000 caracteres para `dall-e-2`  
+    - Máximo 4000 caracteres para `dall-e-3`
+  - `type`: requerido, cadena, opciones: `realistic, anime, cartoon, futuristic, abstract, impressionist, pixel art, watercolor, noir, steampunk, fantasy, vintage, scifi, minimalist, hyperrealistic, dramatic`
+  - `image_number`: entero, de 1 a 10. Se aplica:
+    - Máximo 1 para `dall-e-3`  
+    - Máximo 10 para `dall-e-2`
+  - `style`: para `dall-e-3` es requerido y debe ser `vivid` o `natural`
+  - `size`: requerido, con valores permitidos que dependen del modelo:
+    - Para `dall-e-2`: `256x256, 512x512, 1024x1024`  
+    - Para `dall-e-3`: `1024x1024, 1792x1024, 1024x1792`
+  - `response_format`: cadena, valores permitidos: `url, b64_json`
+  - `quality`: opcional, para:
+    - `dall-e-2`: `standard`  
+    - `dall-e-3`: `standard, hd`
+
+---
+
+## Validaciones y Reglas de Request
+
+La API utiliza las validaciones propias de Laravel para asegurar que las solicitudes cumplen con los requisitos. A continuación se resumen algunas reglas clave:
+
+### Chat Request
+
+- **text:**  
+  - Obligatorio  
+  - Tipo: cadena  
+  - Longitud mínima de 3 y máxima de 1000 caracteres
+
+- **model:**  
+  - Obligatorio  
+  - Tipo: cadena
+
+- **temperature:**  
+  - Obligatorio  
+  - Tipo: numérico, con valor entre 0 y 1.4
+
+- **prompt:**  
+  - Obligatorio  
+  - Tipo: cadena
+
+### Speech-to-Text Request
+
+- **file:**  
+  - Obligatorio  
+  - Debe ser un archivo de audio con extensiones permitidas: `mp3, mp4, mpeg, mpga, m4a, wav, webm`  
+  - Tamaño máximo: 25MB
+
+- **language:**  
+  - Opcional, pero debe pertenecer a la lista de códigos (ej.: en, es, fr, etc.)
+
+- **response_format:**  
+  - Opcional, valores permitidos: `json, text, srt, verbose_json, vtt`
+
+- **temperature:**  
+  - Opcional, numérico (entre 0 y 1)
+
+- **timestamp_granularities:**  
+  - Obligatorio si el `response_format` es `verbose_json`, valores: `word, segment`
+
+### Text-to-Image Request
+
+- **model:**  
+  - Obligatorio  
+  - Valores permitidos: `dall-e-2, dall-e-3`
+
+- **prompt:**  
+  - Obligatorio  
+  - Tipo: cadena, mínimo 8 caracteres  
+  - Longitud máxima variable según modelo:
+    - `dall-e-2`: máximo 1000 caracteres  
+    - `dall-e-3`: máximo 4000 caracteres
+
+- **type:**  
+  - Obligatorio  
+  - Tipo: cadena con opciones predefinidas (ej.: realistic, anime, cartoon, etc.)
+
+- **image_number:**  
+  - Entero, entre 1 y 10  
+  - Se limita a 1 para `dall-e-3` y hasta 10 para `dall-e-2`
+
+- **style:**  
+  - Para `dall-e-3` es obligatorio  
+  - Valores permitidos: `vivid, natural`
+
+- **size:**  
+  - Obligatorio, con opciones que varían según el modelo
+
+- **response_format:**  
+  - Opcional, valores: `url, b64_json`
+
+- **quality:**  
+  - Opcional, valores dependen del modelo:
+    - Para `dall-e-2`: `standard`  
+    - Para `dall-e-3`: `standard, hd`
+
+### Text-to-Speech Request
+
+- **model:**  
+  - Obligatorio  
+  - Valores permitidos: `tts-1, tts-1-hd`
+
+- **input:**  
+  - Obligatorio  
+  - Tipo: cadena, entre 3 y 4096 caracteres
+
+- **voice:**  
+  - Obligatorio  
+  - Valores permitidos: `alloy, ash, coral, echo, fable, onyx, nova, sage, shimmer`
+
+- **response_format:**  
+  - Opcional, valores: `mp3, opus, aac, flac, wav, pcm`
+
+- **speed:**  
+  - Opcional, numérico (entre 0.25 y 4.0)
+
+- **language:**  
+  - Opcional, debe pertenecer a la lista de idiomas soportados
+
+### Translation Request
+
+- **text:**  
+  - Obligatorio  
+  - Tipo: cadena, máximo 1000 caracteres
+
+- **source_language:**  
+  - Obligatorio  
+  - Tipo: cadena, máximo 2 caracteres y debe ser diferente de `target_language`
+
+- **target_language:**  
+  - Obligatorio  
+  - Tipo: cadena, máximo 2 caracteres y diferente de `source_language`
+
+---
+
+## Ejemplos de Uso
+
+### Ejemplo de Solicitud de Chat
+
+```bash
+curl -X POST http://localhost:8000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+        "text": "Hola, ¿cómo estás?",
+        "model": "gpt-4",
+        "temperature": 0.7,
+        "prompt": "Asistente de ayuda"
+      }'
+```
+
+### Ejemplo de Solicitud de Traducción
+
+```bash
+curl -X POST http://localhost:8000/api/translation \
+  -H "Content-Type: application/json" \
+  -d '{
+        "text": "Hello, how are you?",
+        "source_language": "en",
+        "target_language": "es"
+      }'
+```
+
+### Ejemplo de Solicitud de Text-to-Speech
+
+```bash
+curl -X POST http://localhost:8000/api/text-to-speech \
+  -H "Content-Type: application/json" \
+  -d '{
+        "model": "tts-1",
+        "input": "Bienvenido a nuestro servicio",
+        "voice": "nova",
+        "response_format": "mp3",
+        "speed": 1.0,
+        "language": "es"
+      }'
+```
+
+### Ejemplo de Solicitud de Speech-to-Text
+
+```bash
+curl -X POST http://localhost:8000/api/speech-to-text \
+  -F "file=@/ruta/a/tu/audio.wav" \
+  -F "language=es" \
+  -F "response_format=json" \
+  -F "temperature=0.5" \
+  -F "timestamp_granularities=word"
+```
+
+### Ejemplo de Solicitud de Text-to-Image
+
+```bash
+curl -X POST http://localhost:8000/api/text-to-image \
+  -H "Content-Type: application/json" \
+  -d '{
+        "model": "dall-e-3",
+        "prompt": "Una ilustración futurista de una ciudad",
+        "type": "futuristic",
+        "image_number": 1,
+        "style": "vivid",
+        "size": "1024x1024",
+        "response_format": "url"
+      }'
+```
+
+---
+
+## Referencias
+
+- [Documentación oficial de OpenAI](https://platform.openai.com/docs)
+- [Laravel Open AI (paquete)](https://github.com/laravel-open-ai)
+
+---
