@@ -376,7 +376,7 @@ class OpenAIService
         return response()->json($promptDescriptions);
     }
 
-    public function textToImage($model, $prompt, $image_number = 1, $quality, $size, $response_format, $style, $type): array
+    public function textToImage($model, $prompt, $type, $image_number = 1, $quality, $size, $response_format, $style): array
     {
         // Get the description for the prompt type
         $promptDescriptions = $this->getTextToImagePromptType()->getData(true);

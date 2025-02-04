@@ -26,6 +26,7 @@ class TextToImageRequest extends FormRequest
         return [
             'model' => ['required', 'string', 'in:dall-e-2,dall-e-3'],
             'prompt' => ['required', 'string', 'min:8'],
+            'type' => ['required', 'string', 'in:realistic,anime,cartoon,futuristic,abstract,impressionist,pixel art,watercolor,noir,steampunk,fantasy,vintage,scifi,minimalist,hyperrealistic,dramatic'],
             'image_number' => ['integer', 'min:1', 'max:10'],
             'style' => ['string'],
             'size' => ['required', 'string'],
@@ -79,6 +80,7 @@ class TextToImageRequest extends FormRequest
             'model.in' => 'The model must be either dall-e-2 or dall-e-3.',
             'prompt.min' => 'The prompt must be at least 8 characters.',
             'prompt.max' => 'The prompt must be at most 1000 characters for dall-e-2 and 4000 characters for dall-e-3.',
+            'type.in' => 'The type must be one of the following: realistic, anime, cartoon, futuristic, abstract, impressionist, pixel art, watercolor, noir, steampunk, fantasy, vintage, scifi, minimalist, hyperrealistic, dramatic.',
             'size.in' => 'The size must be either 256x256, 512x512, or 1024x1024 for dall-e-2 and 1024x1024, 1792x1024, or 1024x1792 for dall-e-3.',
             'image_number.max' => 'The image number must be at most 1 for dall-e-3 and 1 to 10 for dall-e-2.',
             'style.in' => 'The style must be either vivid or natural for dall-e-3.',
