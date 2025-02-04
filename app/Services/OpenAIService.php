@@ -332,24 +332,6 @@ class OpenAIService
         return response()->json($image_sizes);
     }
 
-    public function getTextToImagePrompt(): JsonResponse
-    {
-        $promptDescriptions = [
-            'realistic' => 'with photorealistic details and natural lighting',
-            'anime' => 'with vibrant colors, anime-style shading, and expressive characters',
-            'cartoon' => 'with bold lines, simple shapes, and bright colors',
-            'futuristic' => 'featuring advanced technology and a sci-fi atmosphere',
-            'abstract' => 'with surreal and abstract forms, blending colors and shapes uniquely',
-            'impressionist' => 'with loose brushwork and an emphasis on light and color',
-            'pixel art' => 'with a retro, pixelated style reminiscent of early video games',
-            'watercolor' => 'with soft, flowing colors and a hand-painted look',
-            'noir' => 'with high contrast, black-and-white tones, and a moody atmosphere',
-            'steampunk' => 'with Victorian-era aesthetics and steam-powered machinery',
-        ];
-
-        return response()->json($promptDescriptions);
-    }
-
     public function getTextToImageResponseFormats(): JsonResponse
     {
         $image_response_formats = [
@@ -368,6 +350,24 @@ class OpenAIService
         ];
 
         return response()->json($image_style);
+    }
+
+    public function getTextToImagePrompt(): JsonResponse
+    {
+        $promptDescriptions = [
+            'realistic' => 'with photorealistic details and natural lighting',
+            'anime' => 'with vibrant colors, anime-style shading, and expressive characters',
+            'cartoon' => 'with bold lines, simple shapes, and bright colors',
+            'futuristic' => 'featuring advanced technology and a sci-fi atmosphere',
+            'abstract' => 'with surreal and abstract forms, blending colors and shapes uniquely',
+            'impressionist' => 'with loose brushwork and an emphasis on light and color',
+            'pixel art' => 'with a retro, pixelated style reminiscent of early video games',
+            'watercolor' => 'with soft, flowing colors and a hand-painted look',
+            'noir' => 'with high contrast, black-and-white tones, and a moody atmosphere',
+            'steampunk' => 'with Victorian-era aesthetics and steam-powered machinery',
+        ];
+
+        return response()->json($promptDescriptions);
     }
 
     public function textToImage($model, $prompt, $image_number = 1, $quality, $size, $response_format, $style): array
