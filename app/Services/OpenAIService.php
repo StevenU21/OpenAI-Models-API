@@ -299,7 +299,7 @@ class OpenAIService
         return $response;
     }
 
-    public function getImageModels(): JsonResponse
+    public function getTextToImageModels(): JsonResponse
     {
         $images = [
             'dall-e-2',
@@ -309,7 +309,7 @@ class OpenAIService
         return response()->json($images);
     }
 
-    public function getTextToImageModels(): JsonResponse
+    public function getTextToImageQuality(): JsonResponse
     {
         $image_quality = [
             'standard',
