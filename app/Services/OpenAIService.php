@@ -352,7 +352,7 @@ class OpenAIService
         return response()->json($image_style);
     }
 
-    public function getTextToImagePrompt(): JsonResponse
+    public function getTextToImagePromptType(): JsonResponse
     {
         $promptDescriptions = [
             'realistic' => 'with photorealistic details and natural lighting',
@@ -370,7 +370,7 @@ class OpenAIService
         return response()->json($promptDescriptions);
     }
 
-    public function textToImage($model, $prompt, $image_number = 1, $quality, $size, $response_format, $style): array
+    public function textToImage($model, $prompt, $image_number = 1, $quality, $size, $response_format, $style, $type): array
     {
         $response = OpenAI::images()->create([
             'model' => $model,

@@ -32,9 +32,9 @@ class TextToImageController extends Controller
         return $this->OpenAIService->getTextToImageSizes();
     }
 
-    public function getTextToImagePrompt(): JsonResponse
+    public function getTextToImagePromptType(): JsonResponse
     {
-        return $this->OpenAIService->getTextToImagePrompt();
+        return $this->OpenAIService->getTextToImagePromptType();
     }
 
     public function getTextToImageResponseFormats(): JsonResponse

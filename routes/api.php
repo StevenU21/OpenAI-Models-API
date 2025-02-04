@@ -48,7 +48,7 @@ Route::prefix('text-to-image')->name('text-to-image.')->group(function () {
     Route::get('/models', [TextToImageController::class, 'getTextToImageModels'])->name('models');
     Route::get('/quality', [TextToImageController::class, 'getTextToImageQuality'])->name('quality');
     Route::get('/sizes', [TextToImageController::class, 'getTextToImageSizes'])->name('sizes');
-    Route::get('/prompt', [TextToImageController::class, 'getTextToImagePrompt'])->name('prompt');
+    Route::get('/prompt', [TextToImageController::class, 'getTextToImagePromptType'])->name('prompt');
     Route::get('/response-formats', [TextToImageController::class, 'getTextToImageResponseFormats'])->name('response-formats');
     Route::get('/style', [TextToImageController::class, 'getTextToImageStyle'])->name('style');
     Route::post('/', [TextToImageController::class, 'textToImage'])->name('text-to-image');
