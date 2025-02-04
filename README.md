@@ -35,6 +35,9 @@ La documentación se basa en la [documentación oficial de OpenAI](https://platf
 
    ```bash
    git clone https://github.com/StevenU21/OpenAI-Models-API.git
+   ```
+    
+    ```bash
    cd OpenAI-Models-API
    ```
 
