@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\SpeechToTextController;
+use App\Http\Controllers\TextToImageController;
 use App\Http\Controllers\TextToSpeechController;
 use App\Http\Controllers\TranslationController;
 use Illuminate\Http\Request;
@@ -41,4 +42,14 @@ Route::prefix('speech-to-text')->name('speech-to-text.')->group(function () {
     Route::get('/timestamp-granularities', [SpeechToTextController::class, 'getSpeechTimestampGranularities'])->name('timestamp-granularities');
     Route::get('/actions', [SpeechToTextController::class, 'getSpeechToTextActions'])->name('actions');
     Route::post('/', [SpeechToTextController::class, 'speechToText'])->name('speech-to-text');
+});
+
+Route::prefix('text-to-image')->name('text-to-image.')->group(function () {
+    Route::get('/models', [TextToImageController::class, 'getTextToImageModels'])->name('models');
+    Route::get('/quality', [TextToImageController::class, 'getTextToImageQuality'])->name('quality');
+    Route::get('/sizes', [TextToImageController::class, 'getTextToImageSizes'])->name('sizes');
+    Route::get('/prompt', [TextToImageController::class, 'getTextToImagePrompt'])->name('prompt');
+    Route::get('/response-formats', [TextToImageController::class, 'getTextToImageResponseFormats'])->name('response-formats');
+    Route::get('/style', [TextToImageController::class, 'getTextToImageStyle'])->name('style');
+    Route::post('/', [TextToImageController::class, 'textToImage'])->name('text-to-image');
 });
