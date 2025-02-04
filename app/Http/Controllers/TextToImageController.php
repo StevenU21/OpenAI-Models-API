@@ -67,9 +67,14 @@ class TextToImageController extends Controller
             $style
         );
 
-        // Save image file
-        $imageUrl = $response['url'];
-        $imageContent = Http::get($imageUrl)->body();
+        if ($response_format === 'url') {
+            // Save image file from URL
+            $imageUrl = $response['url'];
+            $imageContent = Http::get($imageUrl)->body();
+        } elseif ($response_format === 'b64_json') {
+            // Save image file from base64
+            $imageContent = base64_decode($response['b64_json']);
+        }
 
         $imagePath = 'text_image_images/' . uniqid() . '.' . 'png';
         Storage::disk('public')->put($imagePath, $imageContent);
