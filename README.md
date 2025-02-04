@@ -78,7 +78,7 @@ La documentación se basa en la [documentación oficial de OpenAI](https://platf
   Configura la variable `OPENAI_API_KEY` en el archivo `.env` con tu clave de API de OpenAI.
 
 - **Paquete laravel open ai:**  
-  El paquete se encarga de gestionar las solicitudes hacia los servicios de OpenAI. Revisa la [documentación oficial del paquete](https://github.com/laravel-open-ai) para más detalles de configuración avanzada.
+  El paquete se encarga de gestionar las solicitudes hacia los servicios de OpenAI. Revisa la [documentación oficial del paquete](https://github.com/openai-php/laravel) para más detalles de configuración avanzada.
 
 ---
 
