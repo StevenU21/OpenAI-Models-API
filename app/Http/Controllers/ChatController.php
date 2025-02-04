@@ -57,6 +57,6 @@ class ChatController extends Controller
         $imagefilePath = $image->store('conversation_images', 'public');
         $imageUrl = Storage::disk('public')->url($imagefilePath);
 
-        return $this->OpenAIService->file_image_conversation($image);
+        return $this->OpenAIService->file_image_conversation($imageUrl);
     }
 }
