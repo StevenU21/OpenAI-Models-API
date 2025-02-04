@@ -441,6 +441,11 @@ curl -X POST http://localhost:8000/api/text-to-image \
 ## Referencias
 
 - [Documentación oficial de OpenAI](https://platform.openai.com/docs)
+- [Generación de Textos](https://platform.openai.com/docs/guides/text-generation)
+- [Generación de Imágenes](https://platform.openai.com/docs/guides/images)
+- [Generación de Audio a partir de Texto](https://platform.openai.com/docs/guides/text-to-speech)
+- [Generación de Transcriptiones](https://platform.openai.com/docs/guides/speech-to-text)
+- [Endpoints de la ApI de Open AI con Parámetros](https://platform.openai.com/docs/api-reference/chat)
 - [Laravel Open AI (paquete)](https://github.com/laravel-open-ai)
 
 ---
