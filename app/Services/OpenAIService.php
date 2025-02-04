@@ -309,7 +309,7 @@ class OpenAIService
         return response()->json($images);
     }
 
-    public function getImageQuality(): JsonResponse
+    public function getTextToImageModels(): JsonResponse
     {
         $image_quality = [
             'standard',
@@ -319,7 +319,7 @@ class OpenAIService
         return response()->json($image_quality);
     }
 
-    public function getImageSizes(): JsonResponse
+    public function getTextToImageSizes(): JsonResponse
     {
         $image_sizes = [
             '256x256',
@@ -332,7 +332,7 @@ class OpenAIService
         return response()->json($image_sizes);
     }
 
-    public function getImagePrompt(): JsonResponse
+    public function getTextToImagePrompt(): JsonResponse
     {
         $promptDescriptions = [
             'realistic' => 'with photorealistic details and natural lighting',
@@ -350,7 +350,7 @@ class OpenAIService
         return response()->json($promptDescriptions);
     }
 
-    public function getImageResponseFormats(): JsonResponse
+    public function getTextToImageResponseFormats(): JsonResponse
     {
         $image_response_formats = [
             'url',
@@ -360,7 +360,7 @@ class OpenAIService
         return response()->json($image_response_formats);
     }
 
-    public function getImageStyle(): JsonResponse
+    public function getTextToImageStyle(): JsonResponse
     {
         $image_style = [
             'vivid',
