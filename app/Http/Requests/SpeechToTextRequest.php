@@ -26,7 +26,7 @@ class SpeechToTextRequest extends FormRequest
             'language' => ['string', 'in:af,ar,hy,az,be,bs,bg,ca,zh,hr,cs,da,nl,en,et,fi,fr,gl,de,el,he,hi,hu,is,id,it,ja,kn,kk,ko,lv,lt,mk,ms,mr,mi,ne,no,fa,pl,pt,ro,ru,sr,sk,sl,es,sw,sv,tl,ta,th,tr,uk,ur,vi,cy'],
             'response_format' => ['string', 'in:json,text,srt,verbose_json,vtt'],
             'temperature' => ['numeric', 'min:0', 'max:1'],
-            'timestamp_granularities' => ['string', 'in:word,segment']
+            'timestamp_granularities' => ['string', 'in:word,segment', 'required_if:response_format,verbose_json']
         ];
     }
 
@@ -49,6 +49,7 @@ class SpeechToTextRequest extends FormRequest
             'temperature.numeric' => 'The temperature must be a number.',
             'temperature.min' => 'The temperature must be at least :min.',
             'temperature.max' => 'The temperature may not be greaer than :max.',
+            'timestamp_granularities.required_if' => 'The timestamp granularities field is required when response format is verbose_json.',
             'timestamp_granularities.string' => 'The timestamp granularities must be a string.',
             'timestamp_granularities.in' => 'The selected timestamp granularities must be one of the following options: :in',
         ];
