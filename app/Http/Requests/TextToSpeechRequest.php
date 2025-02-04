@@ -48,14 +48,14 @@ class TextToSpeechRequest extends FormRequest
             'input.max' => 'The input may not be greater than :max characters.',
             'voice.required' => 'The voice is required.',
             'voice.string' => 'The voice must be a string.',
-            'voice.in' => 'The selected voice must be one of the following options: :in.',
+            'voice.in' => 'The selected voice must be one of the following options: alloy,ash,coral,echo,fable,onyx,nova,sage,shimmer',
             'response_format.string' => 'The response format must be a string.',
-            'response_format.in' => 'The selected response format must be one of the following options: :in',
+            'response_format.in' => 'The selected response format must be one of the following options: mp3,opus,aac,flac,wav,pcm',
             'language.string' => 'The language must be a string.',
+            'language.in' => 'The selected language must be one of the following options: af,ar,hy,az,be,bs,bg,ca,zh,hr,cs,da,nl,en,et,fi,fr,gl,de,el,he,hi,hu,is,id,it,ja,kn,kk,ko,lv,lt,mk,ms,mr,mi,ne,no,fa,pl,pt,ro,ru,sr,sk,sl,es,sw,sv,tl,ta,th,tr,uk,ur,vi,cy',
             'speed.numeric' => 'The speed must be a number.',
             'speed.min' => 'The speed must be at least :min.',
-            'speed.max' => 'The speed may not be greater than :max.',
-            'language.in' => 'The selected language must be one of the following options: :in',
+            'speed.max' => 'The speed may not be greater than :max.'
         ];
     }
 }

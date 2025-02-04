@@ -43,15 +43,15 @@ class SpeechToTextRequest extends FormRequest
             'file.mimes' => 'The file must be a file of type: :values.',
             'file.max' => 'The file may not be greater than :max kilobytes.',
             'language.string' => 'The language must be a string.',
-            'language.in' => 'The selected language must be one of the following options: :in',
+            'language.in' => 'The selected language must be one of the following options: af,ar,hy,az,be,bs,bg,ca,zh,hr,cs,da,nl,en,et,fi,fr,gl,de,el,he,hi,hu,is,id,it,ja,kn,kk,ko,lv,lt,mk,ms,mr,mi,ne,no,fa,pl,pt,ro,ru,sr,sk,sl,es,sw,sv,tl,ta,th,tr,uk,ur,vi,cy ',
             'response_format.string' => 'The response format must be a string.',
-            'response_format.in' => 'The selected response format must be one of the following options: :in',
+            'response_format.in' => 'The selected response format must be one of the following options: json,text,srt,verbose_json,vtt',
             'temperature.numeric' => 'The temperature must be a number.',
             'temperature.min' => 'The temperature must be at least :min.',
             'temperature.max' => 'The temperature may not be greaer than :max.',
             'timestamp_granularities.required_if' => 'The timestamp granularities field is required when response format is verbose_json.',
             'timestamp_granularities.string' => 'The timestamp granularities must be a string.',
-            'timestamp_granularities.in' => 'The selected timestamp granularities must be one of the following options: :in',
+            'timestamp_granularities.in' => 'The selected timestamp granularities must be one of the following options: word,segment',
         ];
     }
 }
