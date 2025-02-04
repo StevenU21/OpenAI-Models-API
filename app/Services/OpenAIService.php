@@ -355,16 +355,22 @@ class OpenAIService
     public function getTextToImagePromptType(): JsonResponse
     {
         $promptDescriptions = [
-            'realistic' => 'with photorealistic details and natural lighting',
-            'anime' => 'with vibrant colors, anime-style shading, and expressive characters',
-            'cartoon' => 'with bold lines, simple shapes, and bright colors',
-            'futuristic' => 'featuring advanced technology and a sci-fi atmosphere',
-            'abstract' => 'with surreal and abstract forms, blending colors and shapes uniquely',
-            'impressionist' => 'with loose brushwork and an emphasis on light and color',
-            'pixel art' => 'with a retro, pixelated style reminiscent of early video games',
-            'watercolor' => 'with soft, flowing colors and a hand-painted look',
-            'noir' => 'with high contrast, black-and-white tones, and a moody atmosphere',
-            'steampunk' => 'with Victorian-era aesthetics and steam-powered machinery',
+            'realistic' => 'with photorealistic details, natural lighting, and true-to-life textures, capturing the essence of real-world visuals',
+            'anime' => 'with vibrant colors, anime-style shading, exaggerated expressions, and dynamic poses',
+            'cartoon' => 'with bold lines, simplistic yet expressive shapes, and bright, playful colors',
+            'futuristic' => 'featuring advanced technology, sci-fi elements, neon lights, and a sense of otherworldly innovation',
+            'abstract' => 'exploring surreal forms, blending colors and shapes in unexpected ways with an artistic, non-representational style',
+            'impressionist' => 'with loose brushwork, an emphasis on light and color, evoking the fleeting nature of a moment through artistic interpretation',
+            'pixel art' => 'with a retro, pixelated style reminiscent of early video games, featuring blocky graphics and limited color palettes',
+            'watercolor' => 'with soft, flowing colors, gentle gradients, and a hand-painted aesthetic that mimics traditional watercolor techniques',
+            'noir' => 'with high contrast, black-and-white tones, deep shadows, and a moody, cinematic atmosphere reminiscent of classic film noir',
+            'steampunk' => 'with Victorian-era aesthetics, intricate mechanical details, steam-powered machinery, and an industrial yet antique vibe',
+            'fantasy' => 'with mythical elements, enchanted landscapes, magical creatures, and a dream-like, otherworldly atmosphere',
+            'vintage' => 'with retro aesthetics, film grain effects, muted colors, and a nostalgic feel that echoes bygone eras',
+            'scifi' => 'with futuristic and cosmic elements, high-tech devices, neon glows, and an expansive, interstellar setting',
+            'minimalist' => 'with clean lines, simplicity in design, abundant negative space, and a focus on essential elements for a modern look',
+            'hyperrealistic' => 'with exquisite detail, lifelike textures, and realistic lighting that mimics real-world photography to the finest detail',
+            'dramatic' => 'with intense lighting, high contrast, deep shadows, and a cinematic mood that emphasizes emotion and tension',
         ];
 
         return response()->json($promptDescriptions);
@@ -372,9 +378,16 @@ class OpenAIService
 
     public function textToImage($model, $prompt, $image_number = 1, $quality, $size, $response_format, $style, $type): array
     {
+        // Get the description for the prompt type
+        $promptDescriptions = $this->getTextToImagePromptType()->getData(true);
+        $typeDescription = $promptDescriptions[$type] ?? '';
+
+        // Combine the prompt with the type description
+        $combinedPrompt = $prompt . ' ' . $typeDescription;
+
         $response = OpenAI::images()->create([
             'model' => $model,
-            'prompt' => $prompt,
+            'prompt' => $combinedPrompt,
             'n' => $image_number,
             'quality' => $quality,
             'size' => $size,
